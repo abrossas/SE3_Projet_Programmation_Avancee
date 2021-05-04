@@ -44,10 +44,12 @@ typedef struct airlines {
 	char airline[AIRLINE_MAX];
 } Airlines;
 
+struct cell_flights {
+	Flights flight;
+	Flights *pnext;
+};
 
-typedef struct liste_flights { // Comme on a un nombre fixe de vols à analyser, il est préférable d'utiliser une structure simple de tableau pour privilégier une rapidité d'exécution la plus performante possible. Si on voulait ajouter des vols pour mettre à jour le programme, ce serait plus complexe et il faudrait alors utiliser une liste chainée et le coût mémoire serait fortement augmenté par ailleurs (allocation des pointeurs).
-	Flights liste_flights[NB_FLIGHTS];
-} Liste_flights;
+typedef struct cell_flights * Liste_flights; // On utilisera une liste chaînée simple pour stocker les vols pour pouvoir facilement en ajouter de nouveaux
 
 typedef struct liste_airports { // Vu le nombre faible d'aéroports (323) dans la dataset, on utilisera un tableau toujours par soucis de rapidité d'exécution
 	Airports liste_airports[NB_AIRPORTS];
