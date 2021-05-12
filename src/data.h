@@ -51,16 +51,26 @@ struct cell_flights {
 
 typedef struct cell_flights * Liste_flights; // On utilisera une liste chaînée simple pour stocker les vols pour pouvoir facilement en ajouter de nouveaux
 
-typedef struct liste_airports { // Vu le nombre faible d'aéroports (323) dans la dataset, on utilisera un tableau toujours par soucis de rapidité d'exécution
-	Airports liste_airports[NB_AIRPORTS];
-} Liste_airports;
+struct cell_airports {
+	Airports airport;
+	Airports *pnext;
+}:
 
-typedef struct liste_airlines { // Pareil que pour Liste_airports (15 companies aériennes)
-	Airlines liste_airlines[NB_AIRLINES];
-} Liste_airlines;
+typedef struct cell_airports * Liste_airports; // Même raison que pour les vols
+
+struct cell_airlines {
+	Airlines airline;
+	Airlines *pnext;
+};
+
+typedef struct cell_airlines * Liste_airlines; // Idem
+
+
 
 void load_flights(FILE*, struct Liste_flights);
 
 void load_airports(FILE*, struct Liste_airports);
 
 void load_airlines(FILE*, struct Liste_airlines);
+
+ 
