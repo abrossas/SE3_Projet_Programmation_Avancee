@@ -1,23 +1,23 @@
 #define MAX_DATE 5
 
-#include <data.h> // fonctions en rapport avec nos structures de données
+//#include "data.h" // fonctions en rapport avec nos structures de données (déclaration, load..)
 
-void show-airports(char airline_id[IATA_AIRLINE_MAX], Liste_airports liste);
+void show_airports(char*, Liste_airports);
 
-void show-airlines(char port_id[IATA_AIRPORT_MAX], Liste_airlines liste);
+void show_airlines(char*, Liste_airlines);
 
-void show-flights(char port_id[IATA_AIRPORT_MAX], char date[MAX_DATE]); // optionnel : heure de début et nombre limites de vol à afficher
+void show_flights(char*, char); // optionnel : heure de début et nombre limites de vol à afficher
 
-void most-delayed-flights(Liste_flights liste);
+void most_delayed_flights(Liste_flights);
 
-void most-delayed-airlines(Liste_flights liste_flights, Liste_airlines liste_airlines);
+void most_delayed_airlines(Liste_flights, Liste_airlines);
 
-void delayed-airline(char airline_id[IATA_AIRLINE_MAX], Liste_airlines liste);
+void delayed_airline(char*, Liste_airlines);
 
-void most-delayed-airlines-at-airport(char port_id[IATA_AIRPORT_MAX], Liste_airlines liste_airports, Liste_airports liste_airports)
+void most_delayed_airlines_at_airport(char*, Liste_airlines, Liste_airports);
 
-void changed-flights(char date[MAX_DATE]);
+void changed_flights(char*);
 
-void avg-flight-duration(char port_id1[IATA_AIRPORT_MAX], char port_id2[IATA_AIRPORT_MAX]);
+void avg_flight_duration(char*, char*);
 
-void find-itinerary(char port_id2[IATA_AIRPORT_MAX], char port_id2[IATA_AIRPORT_MAX], char date[MAX_DATE]); // optionnel : préciser l'heure, limité à X propositions
+void find_itinerary(char*, char*, char*); // optionnel : préciser l'heure, limité à X propositions

@@ -54,7 +54,7 @@ typedef struct cell_flights * Liste_flights; // On utilisera une liste chaînée
 struct cell_airports {
 	Airports airport;
 	Airports *pnext;
-}:
+};
 
 typedef struct cell_airports * Liste_airports; // Même raison que pour les vols
 
@@ -67,10 +67,10 @@ typedef struct cell_airlines * Liste_airlines; // Idem
 
 
 
-void load_flights(FILE*, struct Liste_flights);
+void load_flights(FILE*, Liste_flights);
 
-void load_airports(FILE*, struct Liste_airports);
+void load_airports(FILE*, Liste_airports);
 
-void load_airlines(FILE*, struct Liste_airlines);
+void load_airlines(FILE*, Liste_airlines);
 
  

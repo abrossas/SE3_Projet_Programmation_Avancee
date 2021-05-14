@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "data.h"
+#include "requetes.h"
+
 int main() {
 
 
