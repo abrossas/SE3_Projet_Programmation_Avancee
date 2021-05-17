@@ -12,7 +12,9 @@
 #define NB_AIRPORTS 323
 #define NB_AIRLINES 15
 
-typedef struct flights
+#define MAX_BUFFER 1024 // taille maximale du buffer qui stockera une ligne du fichier CSV
+
+typedef struct flight
 {
     unsigned short month;
     unsigned short day;
@@ -28,9 +30,9 @@ typedef struct flights
     float          arr_delay;
     bool           diverted;
     bool           cancelled;
-} Flights;
+} Flight;
 
-typedef struct airports
+typedef struct airport
 {
     char  iata_airports[IATA_AIRPORT_MAX];
     char  airport[IATA_AIRPORT_MAX];
@@ -39,38 +41,53 @@ typedef struct airports
     char  country[COUNTRY_MAX];
     float latitude;
     float longitude;
-} Airports;
+} Airport;
 
-typedef struct airlines
+typedef struct airline
 {
     char iata_airlines[IATA_AIRLINE_MAX];
     char airline[AIRLINE_MAX];
-} Airlines;
+} Airline;
 
-struct cell_flights
+struct cell_flight
 {
-    Flights  flight;
-    Flights *pnext;
+    Flight  flight;
+    Flight *pnext_fli;
 };
 
-typedef struct cell_flights *Liste_flights; // On utilisera une liste chaînée simple pour stocker les vols pour pouvoir facilement en ajouter de nouveaux
+typedef struct cell_flight *Liste_flights; // On utilisera une liste chaînée simple pour stocker les vols pour pouvoir facilement en ajouter de nouveaux
 
-struct cell_airports
+struct cell_airport
 {
-    Airports  airport;
-    Airports *pnext;
+    Airport  airport;
+    Airport *pnext_airp;
 };
 
-typedef struct cell_airports *Liste_airports; // Même raison que pour les vols
+typedef struct cell_airport *Liste_airports; // Même raison que pour les vols
 
-struct cell_airlines
+struct cell_airline
 {
-    Airlines  airline;
-    Airlines *pnext;
+    Airline airline;
+    Airline *pnext_airl;
 };
 
-typedef struct cell_airlines *Liste_airlines; // Idem
+typedef struct cell_airline *Liste_airlines; // Idem
 
+// FONCTIONS :
+
+void add_head_flight(Liste_flights *, Flight);
+
+void read_flight(struct cell_flight *, Flight);
+
+void add_head_airport(Liste_airports *, Airport);
+
+void read_airport(struct cell_airport *, Airport);
+
+void add_head_airline(Liste_airlines *, Airline);
+
+void read_airline(struct cell_airline *, Airline);
+
+void load_buf_strtok(char *);
 
 void load_flights (FILE *, Liste_flights);
 
