@@ -46,8 +46,30 @@ void read_flight(struct cell_flight *cell, char buffer[MAX_BUFFER]) {
 	flight.cancelled = atoi(c);
 }
 
-void read_airline(struct cell_airline *cell, char buffer[MAX_BUFFER]) { // TOM FAIS LE EN ADAPTANT CELUI DU DESSUS A AIRLINE
+void read_airline(struct cell_airline *cell, char buffer[MAX_BUFFER]) { 
+	char *c = strtok(buffer, ",");
+	Airline airline = cell_airline->airline
+	airline.iata_airlines = c;
+	load_buf_strtok(c);
+	airline.airline = atof(c);
 }
 
 void read_airport(struct cell_airport *cell, char buffer[MAX_BUFFER]) {
-// PAREIL}
+	char *c = strtok(buffer, ",");
+	Airport airport = cell_airport->airport
+	airport.iata_airports = c;
+	load_buf_strtok(c);
+	airport.airport = c;
+	load_buf_strtok(c);
+	airport.city = c;
+	load_buf_strtok(c);
+	airport.state = c;
+	load_buf_strtok(c);
+	airport.country = c;
+	load_buf_strtok(c);
+	airport.latitude = atof(c);
+	load_buf_strtok(c);
+	airport.longitude = atof(c);
+}
+	
+    
