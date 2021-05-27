@@ -1,32 +1,32 @@
-#define IATA_AIRLINE_MAX 2
-#define IATA_AIRPORT_MAX 3
+#define IATA_AIRLINE_MAX 4
+#define IATA_AIRPORT_MAX 5
 
-#define AIRPORT_MAX 100
-#define CITY_MAX 50
-#define AIRLINE_MAX 30
+#define AIRPORT_MAX 102
+#define CITY_MAX 52
+#define AIRLINE_MAX 32
 
-#define STATE_MAX 2
-#define COUNTRY_MAX 3
+#define STATE_MAX 4
+#define COUNTRY_MAX 5
 
 #define NB_FLIGHTS 58592
 #define NB_AIRPORTS 323
 #define NB_AIRLINES 15
 
-#define MAX_BUFFER 1024 // taille maximale du buffer qui stockera une ligne du fichier CSV
+#define MAX_BUFFER 60 // taille maximale du buffer qui stockera une ligne du fichier CSV
 
 typedef struct flight
 {
-    unsigned short month;
-    unsigned short day;
-    unsigned short weekday;
+    int month;
+    int day;
+    int weekday;
     char           airline[IATA_AIRLINE_MAX];
     char           org_air[IATA_AIRPORT_MAX];
     char           dest_air[IATA_AIRPORT_MAX];
-    unsigned short schep_dep;
+    int schep_dep;
     float          dep_delay;
     float          air_time;
-    unsigned short dist;
-    unsigned short sched_arr;
+    int dist;
+    int sched_arr;
     float          arr_delay;
     bool           diverted;
     bool           cancelled;
@@ -77,15 +77,21 @@ typedef struct cell_airline *Liste_airlines; // Idem
 
 void add_head_flight(Liste_flights *, Flight);
 
-void read_flight(Flight, char*);
+void read_flight(Flight*, char*);
+
+void free_lflights(Liste_flights*);
 
 void add_head_airport(Liste_airports *, Airport);
 
 void read_airport(struct cell_airport *, char*);
 
+void free_lairports(Liste_airports *);
+
 void add_head_airline(Liste_airlines *, Airline);
 
 void read_airline(struct cell_airline *, char*);
+
+void free_lairlines(Liste_airlines*);
 
 void load_buf_strtok(char **);
 

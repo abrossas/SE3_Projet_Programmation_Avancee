@@ -6,7 +6,7 @@
 #include "../includes/data.h"
 
 void add_head_flight(Liste_flights *pliste, Flight flight) {
-	struct cell_flight *new = malloc(sizeof(new));
+	struct cell_flight *new = malloc(sizeof(struct cell_flight));
 	new->flight = flight;
 	new->pnext_fli = *pliste;
 	*pliste = new;
@@ -17,42 +17,42 @@ void load_buf_strtok(char **c) {
 	*c = strtok(NULL,",");
 }
 
-void read_flight(Flight flight, char buffer[MAX_BUFFER]) { 
+void read_flight(Flight *pflight, char buffer[MAX_BUFFER]) { 
 // cette fonction sert à lire une ligne du fichier CSV des flights
 	char *c = strtok(buffer, ",");
-	flight.month = atoi(c); // atoi convertit une chaine de caractère de type "int" en int
-	load_buf_strtok(&c);
-	flight.day = atoi(c);
-	load_buf_strtok(&c);
-	strcpy(flight.org_air,c); // on ne peut pas assigner directement un tableau il faut passer par strcpy
-	load_buf_strtok(&c);
-	strcpy(flight.dest_air,c);
-	load_buf_strtok(&c);
-	flight.schep_dep = atoi(c);
-	load_buf_strtok(&c);
-	flight.dep_delay = atof(c); // atof agit comme atoi mais pour un float
-	load_buf_strtok(&c);
-	flight.air_time = atof(c);
-	load_buf_strtok(&c);
-	flight.dist = atoi(c);
-	load_buf_strtok(&c);
-	flight.sched_arr = atoi(c);
-	load_buf_strtok(&c);
-	flight.arr_delay = atof(c);
-	load_buf_strtok(&c);
-	flight.diverted = atoi(c);
-	load_buf_strtok(&c);
-	flight.cancelled = atoi(c);
+	pflight->month = atoi(c); // atoi convertit une chaine de caractère de type "int" en int
+	c = strtok(NULL,",");
+	pflight->day = atoi(c);
+	c = strtok(NULL,",");
+	strcpy(pflight->org_air,c); // on ne peut pas assigner directement un tableau il faut passer par strcpy
+	c = strtok(NULL,",");
+	strcpy(pflight->dest_air,c);
+	c = strtok(NULL,",");
+	pflight->schep_dep = atoi(c);
+	c = strtok(NULL,",");
+	pflight->dep_delay = atof(c); // atof agit comme atoi mais pour un float
+	c = strtok(NULL,",");
+	pflight->air_time = atof(c);
+	c = strtok(NULL,",");
+	pflight->dist = atoi(c);
+	c = strtok(NULL,",");
+	pflight->sched_arr = atoi(c);
+	c = strtok(NULL,",");
+	pflight->arr_delay = atof(c);
+	c = strtok(NULL,",");
+	pflight->diverted = atoi(c);
+	c = strtok(NULL,",");
+	pflight->cancelled = atoi(c);	
 }
 
-void read_airline(struct cell_airline *cell, char buffer[MAX_BUFFER]) { 
+/*void read_airline(struct cell_airline *cell, char buffer[MAX_BUFFER]) { 
 	char *c = strtok(buffer, ",");
 	Airline airline = cell->airline;
 	strcpy(airline.iata_airlines,c);
 	load_buf_strtok(&c);
 	strcpy(airline.airline,c);
 }
-
+*/
 void read_airport(struct cell_airport *cell, char buffer[MAX_BUFFER]) {
 	char *c = strtok(buffer, ",");
 	Airport airport = cell->airport;
@@ -79,12 +79,25 @@ void load_flights(FILE* f_flights, Liste_flights *pl_flights) {
 		return;
 	}
 	char buffer[MAX_BUFFER];
-	Flight flight;
-	while (fgets(buffer, MAX_BUFFER, f_flights) != NULL) { // On lit chaque ligne du fichier 1 par 1 jusqu'à la fin du fichier
+	fgets(buffer, 120, f_flights); // on "saute" la premiere ligne qui ne nous intéresse pas
+	printf("%s\n",buffer);
+	int i = 1;
+	while (fgets(buffer, MAX_BUFFER, f_flights) != NULL) // On lit chaque ligne du fichier 1 par 1 jusqu'à la fin du fichier
 		{
-			read_flight(flight, buffer);
-			add_head_flight(pl_flights, flight);
+			Flight* pflight = malloc(sizeof(pflight));
+			printf("%d ", i);
+			read_flight(pflight, buffer);
+		//	add_head_flight(pl_flights, *pflight);
+			i++;
 		}
+	
 	fclose(f_flights);
+}
+
+void free_lflights(Liste_flights *pl_flights) {
+	while (*pl_flights != NULL) {
+		struct cell_flight* tmp = *pl_flights;
+		free(*pl_flights);
+		*pl_flights = tmp->pnext_fli;
 	}
 }
