@@ -3,31 +3,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "data.h"
+#include "../includes/data.h"
 
 void add_head_flight(Liste_flights *pliste, Flight flight) {
 	struct cell_flight *new = malloc(sizeof(new));
-	new->flight = flight
-	new->pnext_flight = *pliste;
+	new->flight = flight;
+	new->pnext_fli = *pliste;
 	*pliste = new;
 }
 
-void load_buf_strtok(c) {
+void load_buf_strtok(char *c) {
 // cette fonction sert à faire avancer le buffer lié à strtok afin de parcourir une ligne
 	c = strtok(NULL,",");
 }
 
-void read_flight(struct cell_flight *cell, char buffer[MAX_BUFFER]) { 
+void read_flight(Flight flight, char buffer[MAX_BUFFER]) { 
 // cette fonction sert à lire une ligne du fichier CSV des flights
 	char *c = strtok(buffer, ",");
-	Flight flight = cell_flight->flight
 	flight.month = atoi(c); // atoi convertit une chaine de caractère de type "int" en int
 	load_buf_strtok(c);
-	flight.day = atoi(c)
+	flight.day = atoi(c);
 	load_buf_strtok(c);
-	flight.org_air = c;
+	strcpy(flight.org_air,c); // on ne peut pas assigner directement un tableau il faut passer par strcpy
 	load_buf_strtok(c);
-	flight.dest_air = c;
+	strcpy(flight.dest_air,c);
 	load_buf_strtok(c);
 	flight.schep_dep = atoi(c);
 	load_buf_strtok(c);
@@ -48,28 +47,44 @@ void read_flight(struct cell_flight *cell, char buffer[MAX_BUFFER]) {
 
 void read_airline(struct cell_airline *cell, char buffer[MAX_BUFFER]) { 
 	char *c = strtok(buffer, ",");
-	Airline airline = cell_airline->airline
-	airline.iata_airlines = c;
+	Airline airline = cell->airline;
+	strcpy(airline.iata_airlines,c);
 	load_buf_strtok(c);
-	airline.airline = atof(c);
+	strcpy(airline.airline,c);
 }
 
 void read_airport(struct cell_airport *cell, char buffer[MAX_BUFFER]) {
 	char *c = strtok(buffer, ",");
-	Airport airport = cell_airport->airport
-	airport.iata_airports = c;
+	Airport airport = cell->airport;
+	strcpy(airport.iata_airports,c);
 	load_buf_strtok(c);
-	airport.airport = c;
+	strcpy(airport.airport,c);
 	load_buf_strtok(c);
-	airport.city = c;
+	strcpy(airport.city,c);
 	load_buf_strtok(c);
-	airport.state = c;
+	strcpy(airport.state,c);
 	load_buf_strtok(c);
-	airport.country = c;
+	strcpy(airport.country,c);
 	load_buf_strtok(c);
 	airport.latitude = atof(c);
 	load_buf_strtok(c);
 	airport.longitude = atof(c);
 }
 	
-    
+void load_flights(FILE* f_flights, Liste_flights *pl_flights) {
+	// On considère que *pl_flight a été initialisée à vide et f_flights à NULL
+	f_flights = fopen("../data/flights.csv","r");
+	if (f_flights == NULL) {
+		printf("Couldn't open file \n");
+		return;
+	}
+	char buffer[MAX_BUFFER];
+	Flight flight;
+	while (fgets(buffer, MAX_BUFFER, f_flights) != NULL) { // On lit chaque ligne du fichier 1 par 1 jusqu'à la fin du fichier
+		{
+			read_flight(flight, buffer);
+			add_head_flight(pl_flights, flight);
+		}
+	fclose(f_flights);
+	}
+}

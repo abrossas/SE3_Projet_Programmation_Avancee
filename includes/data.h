@@ -52,7 +52,7 @@ typedef struct airline
 struct cell_flight
 {
     Flight  flight;
-    Flight *pnext_fli;
+    struct cell_flight *pnext_fli;
 };
 
 typedef struct cell_flight *Liste_flights; // On utilisera une liste chaînée simple pour stocker les vols pour pouvoir facilement en ajouter de nouveaux
@@ -60,7 +60,7 @@ typedef struct cell_flight *Liste_flights; // On utilisera une liste chaînée s
 struct cell_airport
 {
     Airport  airport;
-    Airport *pnext_airp;
+    struct cell_airport *pnext_airp;
 };
 
 typedef struct cell_airport *Liste_airports; // Même raison que pour les vols
@@ -68,7 +68,7 @@ typedef struct cell_airport *Liste_airports; // Même raison que pour les vols
 struct cell_airline
 {
     Airline airline;
-    Airline *pnext_airl;
+    struct cell_airline *pnext_airl;
 };
 
 typedef struct cell_airline *Liste_airlines; // Idem
@@ -77,20 +77,20 @@ typedef struct cell_airline *Liste_airlines; // Idem
 
 void add_head_flight(Liste_flights *, Flight);
 
-void read_flight(struct cell_flight *, Flight);
+void read_flight(Flight, char*);
 
 void add_head_airport(Liste_airports *, Airport);
 
-void read_airport(struct cell_airport *, Airport);
+void read_airport(struct cell_airport *, char*);
 
 void add_head_airline(Liste_airlines *, Airline);
 
-void read_airline(struct cell_airline *, Airline);
+void read_airline(struct cell_airline *, char*);
 
 void load_buf_strtok(char *);
 
-void load_flights (FILE *, Liste_flights);
+void load_flights(FILE *, Liste_flights*);
 
-void load_airports (FILE *, Liste_airports);
+void load_airports(FILE *, Liste_airports*);
 
-void load_airlines (FILE *, Liste_airlines);
+void load_airlines(FILE *, Liste_airlines*);
