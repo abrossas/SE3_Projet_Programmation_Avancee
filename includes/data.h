@@ -87,7 +87,7 @@ void add_head_airline(Liste_airlines *, Airline);
 
 void read_airline(struct cell_airline *, char*);
 
-void load_buf_strtok(char *);
+void load_buf_strtok(char **);
 
 void load_flights(FILE *, Liste_flights*);
 

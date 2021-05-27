@@ -12,36 +12,36 @@ void add_head_flight(Liste_flights *pliste, Flight flight) {
 	*pliste = new;
 }
 
-void load_buf_strtok(char *c) {
+void load_buf_strtok(char **c) {
 // cette fonction sert à faire avancer le buffer lié à strtok afin de parcourir une ligne
-	c = strtok(NULL,",");
+	*c = strtok(NULL,",");
 }
 
 void read_flight(Flight flight, char buffer[MAX_BUFFER]) { 
 // cette fonction sert à lire une ligne du fichier CSV des flights
 	char *c = strtok(buffer, ",");
 	flight.month = atoi(c); // atoi convertit une chaine de caractère de type "int" en int
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.day = atoi(c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	strcpy(flight.org_air,c); // on ne peut pas assigner directement un tableau il faut passer par strcpy
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	strcpy(flight.dest_air,c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.schep_dep = atoi(c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.dep_delay = atof(c); // atof agit comme atoi mais pour un float
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.air_time = atof(c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.dist = atoi(c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.sched_arr = atoi(c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.arr_delay = atof(c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.diverted = atoi(c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	flight.cancelled = atoi(c);
 }
 
@@ -49,7 +49,7 @@ void read_airline(struct cell_airline *cell, char buffer[MAX_BUFFER]) {
 	char *c = strtok(buffer, ",");
 	Airline airline = cell->airline;
 	strcpy(airline.iata_airlines,c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	strcpy(airline.airline,c);
 }
 
@@ -57,17 +57,17 @@ void read_airport(struct cell_airport *cell, char buffer[MAX_BUFFER]) {
 	char *c = strtok(buffer, ",");
 	Airport airport = cell->airport;
 	strcpy(airport.iata_airports,c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	strcpy(airport.airport,c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	strcpy(airport.city,c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	strcpy(airport.state,c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	strcpy(airport.country,c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	airport.latitude = atof(c);
-	load_buf_strtok(c);
+	load_buf_strtok(&c);
 	airport.longitude = atof(c);
 }
 	
