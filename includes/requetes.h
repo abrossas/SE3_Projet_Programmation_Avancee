@@ -2,6 +2,8 @@
 
 #define IATA_MAX 5
 
+#define MAX_WEEKDAY 10
+
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
 struct cell_IATA // on utilise cette structure de données pour stocker uniquement les codes IATA des aéroports pour la requête 1 (show-airport)
@@ -17,7 +19,6 @@ typedef struct Date // on utilise cette structure pour stocker des dates de dép
 {
     int month;
     int day;
-    int weekday;
 } Date;
 
 //----------- FONCTIONS POUR LES REQUETES -----------//
@@ -28,7 +29,7 @@ void add_head_iata (Liste_IATA *, char *);
 
 int airport_already_in_list (Liste_IATA, char *);
 
-void show_airports (char *, Liste_airports, Liste_flights);
+void show_airports (char *, Liste_airports, Liste_flights, int max);
 
 void info_airport (Liste_airports, Liste_IATA);
 
@@ -44,7 +45,16 @@ void info_airline (Liste_airlines, Liste_IATA);
 
 int flight_already_in_list (Flight, Liste_flights);
 
-void show_flights (char *, char); // optionnel : heure de début et nombre limites de vol à afficher
+void show_flights (char*, Date, Liste_flights, int); // optionnel : heure de début et nombre limites de vol à afficher
+
+int same_date(Date, Date);
+
+void convert_int_to_weekday(int , char*);
+
+void info_flight(Liste_flights, int max);
+
+
+
 
 
 void most_delayed_flights (Liste_flights);
