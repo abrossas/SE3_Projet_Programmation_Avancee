@@ -25,7 +25,7 @@ int main ()
 
 
     free_lflights (&l_flights);
-    //	free_lairports(&l_airports); // erreur ici jcp pk tom a toi de jouer lol
+    free_lairports (&l_airports); // erreur ici jcp pk tom a toi de jouer lol
     free_lairlines (&l_airlines);
     return 0;
 }

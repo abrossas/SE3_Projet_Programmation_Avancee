@@ -106,9 +106,13 @@ void read_airport (Liste_airports *pl_airports, char *line)
     {
         strToken = strsep (&line, ","); // strsep permet de séparer la chaine de caractère et renvoie la chaine de caractère juste avant l'apparition de ","
         if (strlen (strToken) != 0)
+        {
             Token[i] = strToken;
-        else                 // cas où 2 virgules se suivent
+        }
+        else
+        {                    // cas où 2 virgules se suivent
             Token[i] = "-1"; // on choisit arbitrairement de mettre -1 pour les valeurs manquantes
+        }
     }
 
     //------------------ LECTURE DES DONNEES DANS LA STRUCTURE AIRPORT --------------------//
@@ -199,31 +203,45 @@ int load_airports (FILE *f_airports, Liste_airports *pl_airports)
 
 void free_lflights (Liste_flights *pl_flights)
 {
+    if (*pl_flights == NULL)
+    {
+        return; // aucune allocation mémoire n'a été fait
+    }
+    struct cell_flight *tmp = NULL;
     while (*pl_flights != NULL)
     {
-        struct cell_flight *tmp = *pl_flights;
+        tmp = (*pl_flights)->pnext_fli;
         free (*pl_flights);
-        *pl_flights = tmp->pnext_fli;
+        *pl_flights = tmp;
     }
 }
 
 void free_lairlines (Liste_airlines *pl_airlines)
 {
+    if (*pl_airlines == NULL)
+    {
+        return;
+    }
+    struct cell_airline *tmp = NULL;
     while (*pl_airlines != NULL)
     {
-        struct cell_airline *tmp = *pl_airlines;
+        tmp = (*pl_airlines)->pnext_airl;
         free (*pl_airlines);
-        *pl_airlines = tmp->pnext_airl;
+        *pl_airlines = tmp;
     }
 }
 
 void free_lairports (Liste_airports *pl_airports)
 {
+    if (*pl_airports == NULL)
+    {
+        return;
+    }
+    struct cell_airport *tmp = NULL;
     while (*pl_airports != NULL)
     {
-        printf ("%s\n", (*pl_airports)->airport.airport);
-        struct cell_airport *tmp = *pl_airports;
+        tmp = (*pl_airports)->pnext_airp;
         free (*pl_airports);
-        *pl_airports = tmp->pnext_airp;
+        *pl_airports = tmp;
     }
 }
