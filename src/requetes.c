@@ -13,6 +13,40 @@ void add_head_iata (Liste_IATA *pl_iata, char iata[IATA_AIRPORT_MAX])
     *pl_iata   = pc;
 }
 
+void convert_int_to_weekday(int d, char weekday[MAX_WEEKDAY]) {
+    if (d==1)
+        strcpy(weekday,"MONDAY");
+    if (d==2)
+        strcpy(weekday,"TUESDAY");
+    if (d==3)
+        strcpy(weekday,"WEDNESDAY");
+    if (d==4)
+        strcpy(weekday,"THIRSDAY");
+    if (d==5)
+        strcpy(weekday,"FRIDAY");
+    if (d==6)
+        strcpy(weekday,"SATURDAY");
+    if (d==7)
+        strcpy(weekday,"SUNDAY");
+}
+
+int same_date(Date d1, Date d2) {
+    // Cette fonction renvoie 1 si les dates sont similaires et 0 sinon
+    return d1.day == d2.day && d1.month == d2.month;
+}
+
+void convert_int_to_hour(int h, char hour[MAX_HOUR], char minute[MAX_MINUTE]) { // convertir un int au format "dddd" en 2 chaines de caractères heure et minute
+	snprintf (hour, MAX_HOUR, "%d",h/100);
+	snprintf (minute, MAX_MINUTE, "%d",h%100);
+	}
+
+void convert_int_to_yes(int x, char c[MAX_DIVER]) { // cette fonction convertit un bouléen (0 ou 1) en NO ou YES
+	if (x==0)
+		strcpy(c,"NO");
+	else
+		strcpy(c,"YES");
+}
+
 //---------- PREMIERE REQUETE ----------//
 
 int airport_already_in_list (Liste_IATA l_iata, char iata[IATA_AIRPORT_MAX])
@@ -145,40 +179,6 @@ int flight_already_in_list (Flight flight, Liste_flights l_flights) {
     return 0;
 }
 
-void convert_int_to_weekday(int d, char weekday[MAX_WEEKDAY]) {
-    if (d==1)
-        strcpy(weekday,"MONDAY");
-    if (d==2)
-        strcpy(weekday,"TUESDAY");
-    if (d==3)
-        strcpy(weekday,"WEDNESDAY");
-    if (d==4)
-        strcpy(weekday,"THIRSDAY");
-    if (d==5)
-        strcpy(weekday,"FRIDAY");
-    if (d==6)
-        strcpy(weekday,"SATURDAY");
-    if (d==7)
-        strcpy(weekday,"SUNDAY");
-}
-
-int same_date(Date d1, Date d2) {
-    // Cette fonction renvoie 1 si les dates sont similaires et 0 sinon
-    return d1.day == d2.day && d1.month == d2.month;
-}
-
-void convert_int_to_hour(int h, char hour[MAX_HOUR], char minute[MAX_MINUTE]) { // convertir un int au format "dddd" en 2 chaines de caractères heure et minute
-	snprintf (hour, MAX_HOUR, "%d",h/100);
-	snprintf (minute, MAX_MINUTE, "%d",h%100);
-	}
-
-void convert_int_to_yes(int x, char c[MAX_DIVER]) { // cette fonction convertit un bouléen (0 ou 1) en NO ou YES
-	if (x==0)
-		strcpy(c,"NO");
-	else
-		strcpy(c,"YES");
-}
-
 void info_flight(Liste_flights l_flights, int max) {
     if (l_flights == NULL)
         return;
@@ -189,16 +189,16 @@ void info_flight(Liste_flights l_flights, int max) {
         tmp = l_flights->flight;
         char weekday[MAX_WEEKDAY];
         convert_int_to_weekday(tmp.day,weekday);
-	char hourdep[MAX_HOUR];
-	char minutedep[MAX_MINUTE];
-	convert_int_to_hour(tmp.schep_dep, hourdep, minutedep);
-	char hourarr[MAX_HOUR];
-	char minutearr[MAX_MINUTE];
-	convert_int_to_hour(tmp.sched_arr, hourarr, minutearr);
-	char diverted[MAX_DIVER];
-	convert_int_to_yes(tmp.diverted, diverted);
-	char cancelled[MAX_DIVER];
-	convert_int_to_yes(tmp.cancelled, cancelled);
+	    char hourdep[MAX_HOUR];
+	    char minutedep[MAX_MINUTE];
+	    convert_int_to_hour(tmp.schep_dep, hourdep, minutedep);
+	    char hourarr[MAX_HOUR];
+	    char minutearr[MAX_MINUTE];
+	    convert_int_to_hour(tmp.sched_arr, hourarr, minutearr);
+	    char diverted[MAX_DIVER];
+	    convert_int_to_yes(tmp.diverted, diverted);
+	    char cancelled[MAX_DIVER];
+	    convert_int_to_yes(tmp.cancelled, cancelled);
 
         printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %f -- AIRTIME : %f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
         l_flights = l_flights->pnext_fli;
@@ -229,5 +229,54 @@ void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_fligh
     printf ("--------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d APRES %s:%s (MAX %d PAR DEFAUT A 10)"
             " ---------------\n",port_id,d.month,d.day,heuredep,minutedep,max);
     info_flight(l_tmp, max);
+}
+
+//---------- QUATRIEME REQUETE ----------//
+
+int min_tab_flight(Tab_flights tab_flights) { // retourne l'indice du vol ayant le plus petit retard parmi le tableau de flights
+    int i_min = 0;
+    int min = tab_flights[0].arr_delay;
+    for (int i=1; i<MAX_MOST; i++) {
+        if (tab_flights[i].arr_delay < min) {
+            min = tab_flights[i].arr_delay;
+            i_min = i;
+        }
+    }
+    return i_min;
+}
+
+void elt_more_tab(Flight flight, Tab_flights tab_flights) { // si le retard du vol flight est supérieur au minimum des retards des vols de tab_flights alors il prend sa place
+    i_min = min_tab_flight(tab_flights);
+    if (flight.arr_delay>tab_flights[i_min].arr_delay) {
+        tab_flights[i_min] = flight;
+    }
+}
+
+void most_delayed_flights (Liste_flights l_flights) {
+    Flights tab_flights[MAX_MOST];
+    while (l_flights != NULL) { // on parcourt tous les éléments et on récupère les 5 vols qui ont subis les plus longs retards à l'arrivée dans le tableau tab_flights
+        Flight tmp = Liste_flights->flight;
+        elt_more_tab(tmp, tab_flights);
+        l_flights = l_flights->pnext_fli;
+    }
+    
+    printf("---------------- LES 5 VOLS QUI ONT SUBI LE PLUS DE RETARD A L'ARRIVEE ----------------\n");
+
+    for (int i=0; i<MAX_MOST; i++) {
+        tmp = tab_flights[i];
+        char weekday[MAX_WEEKDAY];
+        convert_int_to_weekday(tmp.day,weekday);
+	    char hourdep[MAX_HOUR];
+	    char minutedep[MAX_MINUTE];
+	    convert_int_to_hour(tmp.schep_dep, hourdep, minutedep);
+	    char hourarr[MAX_HOUR];
+	    char minutearr[MAX_MINUTE];
+	    convert_int_to_hour(tmp.sched_arr, hourarr, minutearr);
+	    char diverted[MAX_DIVER];
+	    convert_int_to_yes(tmp.diverted, diverted);
+	    char cancelled[MAX_DIVER];
+	    convert_int_to_yes(tmp.cancelled, cancelled);
+        printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %f -- AIRTIME : %f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
+    }
 }
 
