@@ -25,6 +25,11 @@ int main ()
 
     printf ("2e requete :\n");
     show_airlines ("LAX", l_airlines, l_flights);
+	
+	printf("3e requete :\n");
+	Date d = {1,1};
+	show_flights("LAX",d,l_flights, 10);
+	
 
     free_lflights (&l_flights);
     free_lairports (&l_airports); // erreur ici jcp pk tom a toi de jouer lol

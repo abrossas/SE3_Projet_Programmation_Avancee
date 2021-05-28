@@ -137,8 +137,8 @@ int flight_already_in_list (Flight flight, Liste_flights l_flights) {
     while (l_flights != NULL)
     { // on parcourt la liste chainée, si on trouve un élément similaire au vol flight, on renvoie 1 et on renvoie 0 si on a parcouru toute la liste sans jamais trouver 
         Flight tmp = l_flights->flight;
-        if (tmp.month == flight->month &&  tmp.day == flight->day &&  tmp.weekday == flight->weekday
-&&  tmp.schep_dep == flight->schep_dep &&  tmp.dist == flight->dist && tmp.sched_arr == flight->sched_arr) 
+        if (tmp.month == flight.month &&  tmp.day == flight.day &&  tmp.weekday == flight.weekday
+&&  tmp.schep_dep == flight.schep_dep &&  tmp.dist == flight.dist && tmp.sched_arr == flight.sched_arr) 
     return 1;
     l_flights = l_flights->pnext_fli;
     }
@@ -167,6 +167,18 @@ int same_date(Date d1, Date d2) {
     return d1.day == d2.day && d1.month == d2.month;
 }
 
+void convert_int_to_hour(int h, char hour[MAX_HOUR], char minute[MAX_MINUTE]) { // convertir un int au format "dddd" en 2 chaines de caractères heure et minute
+	snprintf (hour, MAX_HOUR, "%d",h/100);
+	snprintf (minute, MAX_MINUTE, "%d",h%100);
+	}
+
+void convert_int_to_yes(int x, char c[MAX_DIVER]) { // cette fonction convertit un bouléen (0 ou 1) en NO ou YES
+	if (x==0)
+		strcpy(c,"NO");
+	else
+		strcpy(c,"YES");
+}
+
 void info_flight(Liste_flights l_flights, int max) {
     if (l_flights == NULL)
         return;
@@ -174,20 +186,31 @@ void info_flight(Liste_flights l_flights, int max) {
     int i=0; // compteur pour afficher le nombre maximum de vols que l'utilisateur désire voir
     while (l_flights != NULL && i<max)
     {
-        tmp = l_flights->flight
+        tmp = l_flights->flight;
         char weekday[MAX_WEEKDAY];
-        convert_int_to_weekday(flight.day,weekday)
-        printf("%s, %d, %d, %s, %s, %s, %d, %f, %f, %d, %d, %f, %d, %d \n", weekday, tmp.month, tmp.day, tmp.airline, tmp.org_air, tmp.dest_air, tmp.schep_dep, tmp.dep_delay, tmp.air_time, tmp.dist, tmp.sched_arr, tmp.arr_delay, tmp.diverted, tmp.cancelled);
+        convert_int_to_weekday(tmp.day,weekday);
+	char hourdep[MAX_HOUR];
+	char minutedep[MAX_MINUTE];
+	convert_int_to_hour(tmp.schep_dep, hourdep, minutedep);
+	char hourarr[MAX_HOUR];
+	char minutearr[MAX_MINUTE];
+	convert_int_to_hour(tmp.sched_arr, hourarr, minutearr);
+	char diverted[MAX_DIVER];
+	convert_int_to_yes(tmp.diverted, diverted);
+	char cancelled[MAX_DIVER];
+	convert_int_to_yes(tmp.cancelled, cancelled);
+
+        printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %f -- AIRTIME : %f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
         l_flights = l_flights->pnext_fli;
     }
 }
 
-void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_flights, int max){   
+void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_flights, int max) {   
    Liste_flights l_tmp = NULL;
     while (l_flights != NULL)
     {
         Flight tmp = l_flights->flight;
-        Date d_flight = {tmp.month,tmp.day}
+        Date d_flight = {tmp.month,tmp.day};
         if (strcmp (port_id, l_flights->flight.org_air) == 0 && same_date(d,d_flight)) // On cherche les vols qui partent de port_id à la même date que d
         {
             if (flight_already_in_list (tmp, l_tmp) == 0)
@@ -197,12 +220,11 @@ void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_fligh
     }
 
     if (l_tmp == NULL) { // Cas où on n'a trouvé aucun vol à afficher
-        printf("Aucun vol ne correspond à vos critères de recherche\n")
+        printf("Aucun vol ne correspond à vos critères de recherche\n");
         return;
     }
-    printf ("--------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d"
-            "---------------\n",port_id,d.month,d.day);
+    printf ("--------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d (MAX %d PAR DEFAUT A 10)"
+            " ---------------\n",port_id,d.month,d.day, max);
     info_flight(l_tmp, max);
-    }
 }
 

@@ -3,6 +3,10 @@
 #define IATA_MAX 5
 
 #define MAX_WEEKDAY 10
+#define MAX_DIVER 4
+#define MAX_HOUR 3
+#define MAX_MINUTE 3
+
 
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
@@ -29,7 +33,7 @@ void add_head_iata (Liste_IATA *, char *);
 
 int airport_already_in_list (Liste_IATA, char *);
 
-void show_airports (char *, Liste_airports, Liste_flights, int max);
+void show_airports (char *, Liste_airports, Liste_flights);
 
 void info_airport (Liste_airports, Liste_IATA);
 
