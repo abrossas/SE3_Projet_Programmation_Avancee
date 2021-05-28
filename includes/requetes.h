@@ -6,7 +6,7 @@
 #define MAX_DIVER 4
 #define MAX_HOUR 3
 #define MAX_MINUTE 3
-
+#define MAX_MOST 5
 
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
@@ -67,7 +67,9 @@ void info_flight(Liste_flights, int max);
 
 void most_delayed_flights (Liste_flights);
 
+void elt_more_tab(Flight, Tab_flights);
 
+int min_tab_flight(Tab_flights);
 
 
 void most_delayed_airlines (Liste_flights, Liste_airlines);
