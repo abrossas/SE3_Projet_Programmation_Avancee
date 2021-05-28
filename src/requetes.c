@@ -97,7 +97,7 @@ void info_airline(Liste_airlines l_airlines, Liste_IATA l_iata){
     while(l_iata != NULL)
     {
        if (strcmp(l_airlines->airline.iata_airlines, l_iata->iata)==0)
-			printf("IATA CODE : %s --- AIRLINE : %s\n", l_airlines->airline.iata_airlines, l_airlines->airline.airline);
+			printf("IATA CODE : %s ----------------------------------------------- AIRLINE : %s\n", l_airlines->airline.iata_airlines, l_airlines->airline.airline);
 		l_airlines = l_airlines->pnext_airl;
 	}	 
 }
