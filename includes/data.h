@@ -77,7 +77,7 @@ typedef struct cell_airline *Liste_airlines; // Idem
 
 void add_head_flight(Liste_flights *, Flight);
 
-void read_flight(Flight*, char*);
+void read_flight(Liste_flights *, char*);
 
 void free_lflights(Liste_flights*);
 
@@ -93,10 +93,10 @@ void read_airline(struct cell_airline *, char*);
 
 void free_lairlines(Liste_airlines*);
 
-void load_buf_strtok(char **);
 
-void load_flights(FILE *, Liste_flights*);
 
-void load_airports(FILE *, Liste_airports*);
+int load_flights(FILE *, Liste_flights*);
 
-void load_airlines(FILE *, Liste_airlines*);
+int load_airports(FILE *, Liste_airports*);
+
+int load_airlines(FILE *, Liste_airlines*);
