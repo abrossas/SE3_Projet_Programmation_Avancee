@@ -14,20 +14,20 @@
 
 typedef struct flight
 {
-    int month;
-    int day;
-    int weekday;
-    char           airline[IATA_AIRLINE_MAX];
-    char           org_air[IATA_AIRPORT_MAX];
-    char           dest_air[IATA_AIRPORT_MAX];
-    int schep_dep;
-    float          dep_delay;
-    float          air_time;
-    int dist;
-    int sched_arr;
-    float          arr_delay;
-    bool           diverted;
-    bool           cancelled;
+    int   month;
+    int   day;
+    int   weekday;
+    char  airline[IATA_AIRLINE_MAX];
+    char  org_air[IATA_AIRPORT_MAX];
+    char  dest_air[IATA_AIRPORT_MAX];
+    int   schep_dep;
+    float dep_delay;
+    float air_time;
+    int   dist;
+    int   sched_arr;
+    float arr_delay;
+    bool  diverted;
+    bool  cancelled;
 } Flight;
 
 typedef struct airport
@@ -49,7 +49,7 @@ typedef struct airline
 
 struct cell_flight
 {
-    Flight  flight;
+    Flight              flight;
     struct cell_flight *pnext_fli;
 };
 
@@ -57,7 +57,7 @@ typedef struct cell_flight *Liste_flights; // On utilisera une liste chaînée s
 
 struct cell_airport
 {
-    Airport  airport;
+    Airport              airport;
     struct cell_airport *pnext_airp;
 };
 
@@ -65,7 +65,7 @@ typedef struct cell_airport *Liste_airports; // Même raison que pour les vols
 
 struct cell_airline
 {
-    Airline airline;
+    Airline              airline;
     struct cell_airline *pnext_airl;
 };
 
@@ -73,30 +73,29 @@ typedef struct cell_airline *Liste_airlines; // Idem
 
 // FONCTIONS :
 
-void add_head_flight(Liste_flights *, Flight);
+void add_head_flight (Liste_flights *, Flight);
 
-void read_flight(Liste_flights *, char*);
+void read_flight (Liste_flights *, char *);
 
-void free_lflights(Liste_flights*);
-
-
-void add_head_airport(Liste_airports *, Airport);
-
-void read_airport(Liste_airports*, char*);
-
-void free_lairports(Liste_airports *);
+void free_lflights (Liste_flights *);
 
 
-void add_head_airline(Liste_airlines *, Airline);
+void add_head_airport (Liste_airports *, Airport);
 
-void read_airline(Liste_airlines*, char*);
+void read_airport (Liste_airports *, char *);
 
-void free_lairlines(Liste_airlines*);
+void free_lairports (Liste_airports *);
 
 
+void add_head_airline (Liste_airlines *, Airline);
 
-int load_flights(FILE *, Liste_flights*);
+void read_airline (Liste_airlines *, char *);
 
-int load_airports(FILE *, Liste_airports*);
+void free_lairlines (Liste_airlines *);
 
-int load_airlines(FILE *, Liste_airlines*);
+
+int load_flights (FILE *, Liste_flights *);
+
+int load_airports (FILE *, Liste_airports *);
+
+int load_airlines (FILE *, Liste_airlines *);
