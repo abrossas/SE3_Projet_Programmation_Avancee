@@ -81,15 +81,17 @@ void read_flight(Liste_flights *, char*);
 
 void free_lflights(Liste_flights*);
 
+
 void add_head_airport(Liste_airports *, Airport);
 
-void read_airport(struct cell_airport *, char*);
+void read_airport(Liste_airports*, char*);
 
 void free_lairports(Liste_airports *);
 
+
 void add_head_airline(Liste_airlines *, Airline);
 
-void read_airline(struct cell_airline *, char*);
+void read_airline(Liste_airlines*, char*);
 
 void free_lairlines(Liste_airlines*);
 

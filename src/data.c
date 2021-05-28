@@ -19,7 +19,7 @@ void add_head_airline(Liste_airlines *pliste, Airline airline){
 	*pliste = new;
 }
 
-void add_head_airport(Liste_airport *pliste, Airport airport){
+void add_head_airport(Liste_airports *pliste, Airport airport){
 	struct cell_airport *new = malloc(sizeof(struct cell_airport));
 	new->airport = airport;
 	new->pnext_airp = *pliste;
@@ -64,7 +64,7 @@ void read_flight(Liste_flights *pl_flights, char* line) {
 
 }		
 
-void read_airline(struct cell_airline *cell, char buffer[MAX_BUFFER]) { 
+void read_airline(Liste_airlines *pl_airlines, char *line) { 
 // cette fonction sert à lire une ligne du fichier CSV des airlines et à mettre les données dans une structure Airline puis à la mettre dans la liste des airlines
 	char* strToken;
 	char* Token[2];
@@ -91,7 +91,7 @@ void read_airline(struct cell_airline *cell, char buffer[MAX_BUFFER]) {
 }
 
 
-void read_airport(struct cell_airport *cell, char buffer[MAX_BUFFER]) { 
+void read_airport(Liste_airports *pl_airports, char *line) { 
 // cette fonction sert à lire une ligne du fichier CSV des airports et à mettre les données dans une structure Airport puis à la mettre dans la liste des airports
 	char* strToken;
 	char* Token[7];
@@ -177,7 +177,7 @@ int load_airports(FILE* f_airports, Liste_airports *pl_airports) { // Retourne 1
 	size_t len = 0;
 	getline(&line, &len, f_airports); // on "saute" la premiere ligne qui ne nous intéresse pas
 
-	while (getline(&line,&len,f_airports != -1) // On lit chaque ligne du fichier 1 par 1 jusqu'à la fin du fichier
+	while (getline(&line,&len,f_airports) != -1) // On lit chaque ligne du fichier 1 par 1 jusqu'à la fin du fichier
 		{
 			read_airport(pl_airports, line); // On écrit le airport dans l_airports
 		}
@@ -197,7 +197,7 @@ void free_lflights(Liste_flights *pl_flights) {
 
 void free_lairlines(Liste_airlines *pl_airlines) {
 	while (*pl_airlines != NULL) {
-		struct cell_airlines* tmp = *pl_airlines;
+		struct cell_airline* tmp = *pl_airlines;
 		free(*pl_airlines);
 		*pl_airlines = tmp->pnext_airl;
 	}
@@ -205,7 +205,7 @@ void free_lairlines(Liste_airlines *pl_airlines) {
 
 void free_lairports(Liste_airports *pl_airports) {
 	while (*pl_airports != NULL) {
-		struct cell_airports* tmp = *pl_airports;
+		struct cell_airport* tmp = *pl_airports;
 		free(*pl_airports);
 		*pl_airports = tmp->pnext_airp;
 	}
