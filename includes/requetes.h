@@ -1,10 +1,12 @@
 #include "data.h"
 
+#define IATA_MAX 5
+
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
 struct cell_IATA // on utilise cette structure de données pour stocker uniquement les codes IATA des aéroports pour la requête 1 (show-airport)
 {
-    char              airport[IATA_AIRPORT_MAX];
+    char              iata[IATA_MAX];
     struct cell_IATA *p_next;
 };
 
@@ -20,23 +22,31 @@ typedef struct Date // on utilise cette structure pour stocker des dates de dép
 
 //----------- FONCTIONS POUR LES REQUETES -----------//
 
+void add_head_iata(Liste_IATA *, char *);
+
 // REQUETE 1 : show-airport
 
 int airport_already_in_list (Liste_IATA, char *);
 
 void show_airports (char *, Liste_airports, Liste_flights);
 
-void add_head (Liste_IATA *, char *);
-
-void show_airports (char *, Liste_airports, Liste_flights);
+void info_airport (Liste_airports, Liste_IATA)
 
 // REQUETE 2 : show-airline
 
-int flight_already_in_list (Liste_IATA l_iata, Liste_flights l_flights);
+int airline_already_in_list (Airline, Liste_airlines);
 
 void show_airlines (char *, Liste_airlines);
 
+void info_airline (Liste_airlines, Liste)
+
+// REQUETE 3 : show-flights
+
+int flight_already_in_list (Flight, Liste_flights);
+
 void show_flights (char *, char); // optionnel : heure de début et nombre limites de vol à afficher
+
+
 
 void most_delayed_flights (Liste_flights);
 
