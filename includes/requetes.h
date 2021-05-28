@@ -30,15 +30,15 @@ int airport_already_in_list (Liste_IATA, char *);
 
 void show_airports (char *, Liste_airports, Liste_flights);
 
-void info_airport (Liste_airports, Liste_IATA)
+void info_airport (Liste_airports, Liste_IATA);
 
 // REQUETE 2 : show-airline
 
-int airline_already_in_list (Airline, Liste_airlines);
+int airline_already_in_list (Liste_IATA, char*);
 
-void show_airlines (char *, Liste_airlines);
+void show_airlines (char *, Liste_airlines, Liste_flights);
 
-void info_airline (Liste_airlines, Liste)
+void info_airline (Liste_airlines, Liste_IATA);
 
 // REQUETE 3 : show-flights
 

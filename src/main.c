@@ -23,6 +23,8 @@ int main ()
     printf ("1ere requête :\n");
     show_airports ("UA", l_airports, l_flights);
 
+	printf("2e requete :\n");
+	show_airlines("SLC", l_airlines, l_flights);
 
     free_lflights (&l_flights);
     free_lairports (&l_airports); // erreur ici jcp pk tom a toi de jouer lol

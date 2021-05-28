@@ -8,7 +8,7 @@
 void add_head_iata (Liste_IATA *pl_iata, char iata[IATA_AIRPORT_MAX])
 {
     struct cell_IATA *pc = malloc (sizeof (struct cell_IATA));
-    strcpy (pc->airport, iata);
+    strcpy (pc->iata, iata);
     pc->p_next = *pl_iata;
     *pl_iata   = pc;
 }
@@ -21,7 +21,7 @@ int airport_already_in_list (Liste_IATA l_iata, char iata[IATA_AIRPORT_MAX])
     if (l_iata == NULL) return 0;
     while (l_iata != NULL) // on parcourt la liste chainée, si on trouve un élément similaire à iata, on renvoie 1 et on renvoie 0 si on a parcouru toute la liste sans jamais trouver
     {
-        if (strcmp (iata, l_iata->airport) == 0) return 1;
+        if (strcmp (iata, l_iata->iata) == 0) return 1;
         l_iata = l_iata->p_next;
     }
     return 0;
@@ -35,7 +35,7 @@ void info_airport (Liste_airports l_airports, Liste_IATA l_iata)
 
     while (l_airports != NULL) // On parcourt toute la liste des aéroports (qu'on a préalablement load) pour trouver les infos de celui qui correspond au code iata du premier élément de l_iata
     {
-        if (strcmp (l_iata->airport, l_airports->airport.iata_airports) == 0)
+        if (strcmp (l_iata->iata, l_airports->airport.iata_airports) == 0)
             printf ("CODE IATA : %s --- AEROPORT : %s --- VILLE : %s --- ETAT : %s\n",
                     l_airports->airport.iata_airports, l_airports->airport.airport,
                     l_airports->airport.city, l_airports->airport.state);
@@ -96,8 +96,8 @@ void info_airline(Liste_airlines l_airlines, Liste_IATA l_iata){
         return;
     while(l_iata != NULL)
     {
-       if (strcmp(l_airlines->airport, l_iata->iata)==0)
-			printf("%s, %s \n", l_airlines->iata_airlines, l_airlines->airline);
+       if (strcmp(l_airlines->airline.iata_airlines, l_iata->iata)==0)
+			printf("IATA CODE : %s --- AIRLINE : %s\n", l_airlines->airline.iata_airlines, l_airlines->airline.airline);
 		l_airlines = l_airlines->pnext_airl;
 	}	 
 }
@@ -108,19 +108,20 @@ void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, L
     {
         if (strcmp(port_id,l_flights->flight.org_air)==0) // On cherche les aéroports de départ pour différents vols qui sont les mêmes que port_id
 		{
-            if (airline_already_in_list(l, l_flights->flight.airline)==0)
-                    add_head_flight(&l_iata, l_flights->flight.airline); // fonction déjà codée dans data.c
+            if (airline_already_in_list(l_iata, l_flights->flight.airline)==0)
+                    add_head_iata(&l_iata, l_flights->flight.airline); // fonction déjà codée dans data.c
         }
         l_flights = l_flights->pnext_fli;
     }
 
-    if (l_iata == NULL) // Cas où on n'a trouvé aucune companie à afficher (possible erreur de l'utilisateur)
-        return;
+    	if (l_iata == NULL) // Cas où on n'a trouvé aucune companie à afficher (possible erreur de l'utilisateur)
+        	return;
 
+	printf("--------- LISTE DES COMPANIES AYANT DES VOLS PARTANT DE L'AEROPORT %s ---------\n", port_id); 
     while (l_iata != NULL)
     {
         info_airline(l_airlines, l_iata);
-        l_iata = l_iata->suivant;
+        l_iata = l_iata->p_next;
     }
 }
 
@@ -138,7 +139,7 @@ void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, L
 
 //---------- TROISIEME REQUETE ----------//
 
-int flight_already_in_list (Flight flight, Liste_flights l_flights) {
+/*int flight_already_in_list (Flight flight, Liste_flights l_flights) {
     if (l_flights == NULL)
     		return 0;
     while (l_flights != NULL)
@@ -151,4 +152,4 @@ int flight_already_in_list (Flight flight, Liste_flights l_flights) {
     return 0;	
 }				
 
-
+*/
