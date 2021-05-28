@@ -110,7 +110,7 @@ void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, L
             0) // On cherche les aéroports de départ pour différents vols qui sont les mêmes que port_id
         {
             if (airline_already_in_list (l_iata, l_flights->flight.airline) == 0)
-                add_head_iata (&l_iata, l_flights->flight.airline); // fonction déjà codée dans data.c
+                add_head_iata (&l_iata, l_flights->flight.airline);
         }
         l_flights = l_flights->pnext_fli;
     }
@@ -131,17 +131,78 @@ void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, L
 
 //---------- TROISIEME REQUETE ----------//
 
-/*int flight_already_in_list (Flight flight, Liste_flights l_flights) {
+int flight_already_in_list (Flight flight, Liste_flights l_flights) {
     if (l_flights == NULL)
             return 0;
     while (l_flights != NULL)
-    { // on parcourt la liste chainée, si on trouve un élément similaire au vol flight, on renvoie 1
-et on renvoie 0 si on a parcouru toute la liste sans jamais trouver Flight tmp = l_flights->flight;
+    { // on parcourt la liste chainée, si on trouve un élément similaire au vol flight, on renvoie 1 et on renvoie 0 si on a parcouru toute la liste sans jamais trouver 
+        Flight tmp = l_flights->flight;
         if (tmp.month == flight->month &&  tmp.day == flight->day &&  tmp.weekday == flight->weekday
-&&  tmp.schep_dep == flight->schep_dep &&  tmp.dist == flight->dist && tmp.sched_arr ==
-flight->sched_arr) return 1; l_flights = l_flights->pnext_fli;
+&&  tmp.schep_dep == flight->schep_dep &&  tmp.dist == flight->dist && tmp.sched_arr == flight->sched_arr) 
+    return 1;
+    l_flights = l_flights->pnext_fli;
     }
     return 0;
 }
 
-*/
+void convert_int_to_weekday(int d, char weekday[MAX_WEEKDAY]) {
+    if (d==1)
+        strcpy(weekday,"MONDAY");
+    if (d==2)
+        strcpy(weekday,"TUESDAY");
+    if (d==3)
+        strcpy(weekday,"WEDNESDAY");
+    if (d==4)
+        strcpy(weekday,"THIRSDAY");
+    if (d==5)
+        strcpy(weekday,"FRIDAY");
+    if (d==6)
+        strcpy(weekday,"SATURDAY");
+    if (d==7)
+        strcpy(weekday,"SUNDAY");
+}
+
+int same_date(Date d1, Date d2) {
+    // Cette fonction renvoie 1 si les dates sont similaires et 0 sinon
+    return d1.day == d2.day && d1.month == d2.month;
+}
+
+void info_flight(Liste_flights l_flights, int max) {
+    if (l_flights == NULL)
+        return;
+    Flight tmp;
+    int i=0; // compteur pour afficher le nombre maximum de vols que l'utilisateur désire voir
+    while (l_flights != NULL && i<max)
+    {
+        tmp = l_flights->flight
+        char weekday[MAX_WEEKDAY];
+        convert_int_to_weekday(flight.day,weekday)
+        printf("%s, %d, %d, %s, %s, %s, %d, %f, %f, %d, %d, %f, %d, %d \n", weekday, tmp.month, tmp.day, tmp.airline, tmp.org_air, tmp.dest_air, tmp.schep_dep, tmp.dep_delay, tmp.air_time, tmp.dist, tmp.sched_arr, tmp.arr_delay, tmp.diverted, tmp.cancelled);
+        l_flights = l_flights->pnext_fli;
+    }
+}
+
+void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_flights, int max){   
+   Liste_flights l_tmp = NULL;
+    while (l_flights != NULL)
+    {
+        Flight tmp = l_flights->flight;
+        Date d_flight = {tmp.month,tmp.day}
+        if (strcmp (port_id, l_flights->flight.org_air) == 0 && same_date(d,d_flight)) // On cherche les vols qui partent de port_id à la même date que d
+        {
+            if (flight_already_in_list (tmp, l_tmp) == 0)
+                add_head_flight(&l_tmp, tmp); // fonction déjà codée dans data.c
+        }
+        l_flights = l_flights->pnext_fli;
+    }
+
+    if (l_tmp == NULL) { // Cas où on n'a trouvé aucun vol à afficher
+        printf("Aucun vol ne correspond à vos critères de recherche\n")
+        return;
+    }
+    printf ("--------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d"
+            "---------------\n",port_id,d.month,d.day);
+    info_flight(l_tmp, max);
+    }
+}
+
