@@ -1,7 +1,5 @@
 #include "data.h"
 
-#define MAX_DATE 5
-
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
  struct cell_IATA // on utilise cette structure de données pour stocker uniquement les codes IATA des aéroports pour la requête 1 (show-airport)

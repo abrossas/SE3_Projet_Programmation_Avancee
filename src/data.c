@@ -12,14 +12,14 @@ void add_head_flight(Liste_flights *pliste, Flight flight) {
 	*pliste = new;
 }
 
-void add_head_airline(Liste_airlines *pliste, Airline airline){
+void add_head_airline(Liste_airlines *pliste, Airline airline) {
 	struct cell_airline *new = malloc(sizeof(struct cell_airline));
 	new->airline = airline;
 	new->pnext_airl = *pliste;
 	*pliste = new;
 }
 
-void add_head_airport(Liste_airports *pliste, Airport airport){
+void add_head_airport(Liste_airports *pliste, Airport airport) {
 	struct cell_airport *new = malloc(sizeof(struct cell_airport));
 	new->airport = airport;
 	new->pnext_airp = *pliste;
@@ -151,11 +151,10 @@ int load_airlines(FILE* f_airlines, Liste_airlines *pl_airlines) { // Retourne 1
 	if (f_airlines == NULL) {
 		printf("Couldn't open file \n");
 		return 0;
-	} 
+	}
 	char *line = NULL;
 	size_t len = 0;
 	getline(&line, &len, f_airlines); // on "saute" la premiere ligne qui ne nous intéresse pas
-
 	while (getline(&line,&len,f_airlines) != -1) // On lit chaque ligne du fichier 1 par 1 jusqu'à la fin du fichier
 		{
 			read_airline(pl_airlines, line); // On écrit le airline dans l_airlines
@@ -205,6 +204,7 @@ void free_lairlines(Liste_airlines *pl_airlines) {
 
 void free_lairports(Liste_airports *pl_airports) {
 	while (*pl_airports != NULL) {
+		printf("%s\n",(*pl_airports)->airport.airport);
 		struct cell_airport* tmp = *pl_airports;
 		free(*pl_airports);
 		*pl_airports = tmp->pnext_airp;

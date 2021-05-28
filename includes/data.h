@@ -1,9 +1,9 @@
 #define IATA_AIRLINE_MAX 4
 #define IATA_AIRPORT_MAX 5
 
-#define AIRPORT_MAX 102
-#define CITY_MAX 52
-#define AIRLINE_MAX 32
+#define AIRPORT_MAX 200
+#define CITY_MAX 50
+#define AIRLINE_MAX 30
 
 #define STATE_MAX 4
 #define COUNTRY_MAX 5
@@ -11,8 +11,6 @@
 #define NB_FLIGHTS 58592
 #define NB_AIRPORTS 323
 #define NB_AIRLINES 15
-
-#define MAX_BUFFER 60 // taille maximale du buffer qui stockera une ligne du fichier CSV
 
 typedef struct flight
 {
@@ -35,7 +33,7 @@ typedef struct flight
 typedef struct airport
 {
     char  iata_airports[IATA_AIRPORT_MAX];
-    char  airport[IATA_AIRPORT_MAX];
+    char  airport[AIRPORT_MAX];
     char  city[CITY_MAX];
     char  state[STATE_MAX];
     char  country[COUNTRY_MAX];

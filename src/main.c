@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../includes/data.h"
 #include "../includes/requetes.h"
 
 int main () {
@@ -18,11 +17,14 @@ int main () {
 
 	printf("%d\n",load_flights(f_flights, &l_flights));
 	printf("%d\n",load_airports(f_airports, &l_airports));
-	printf("%d\n",load_airlines(f_airlines, &l_airlines));
+	printf("%d\n",load_airlines(f_airlines, &l_airlines));	
 
+	printf("1ere requête :\n");
+	show_airports("UA", l_airports, l_flights);
+
+	
 
 	free_lflights(&l_flights);
-	free_lairports(&l_airports);
+//	free_lairports(&l_airports); // erreur ici jcp pk tom a toi de jouer lol
 	free_lairlines(&l_airlines);
-
 	return 0; }
