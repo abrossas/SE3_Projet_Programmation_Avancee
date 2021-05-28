@@ -205,13 +205,13 @@ void info_flight(Liste_flights l_flights, int max) {
     }
 }
 
-void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_flights, int max) {   
+void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_flights, int max, int hourdep) {   
    Liste_flights l_tmp = NULL;
     while (l_flights != NULL)
     {
         Flight tmp = l_flights->flight;
         Date d_flight = {tmp.month,tmp.day};
-        if (strcmp (port_id, l_flights->flight.org_air) == 0 && same_date(d,d_flight)) // On cherche les vols qui partent de port_id à la même date que d
+        if (strcmp (port_id, l_flights->flight.org_air) == 0 && same_date(d,d_flight) && tmp.schep_dep > hourdep) // On cherche les vols qui partent de port_id à la même date que d
         {
             if (flight_already_in_list (tmp, l_tmp) == 0)
                 add_head_flight(&l_tmp, tmp); // fonction déjà codée dans data.c
@@ -223,8 +223,11 @@ void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_fligh
         printf("Aucun vol ne correspond à vos critères de recherche\n");
         return;
     }
-    printf ("--------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d (MAX %d PAR DEFAUT A 10)"
-            " ---------------\n",port_id,d.month,d.day, max);
+    char heuredep[MAX_HOUR];
+    char minutedep[MAX_MINUTE];
+    convert_int_to_hour(hourdep, heuredep, minutedep);
+    printf ("--------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d APRES %s:%s (MAX %d PAR DEFAUT A 10)"
+            " ---------------\n",port_id,d.month,d.day,heuredep,minutedep,max);
     info_flight(l_tmp, max);
 }
 

@@ -49,7 +49,7 @@ void info_airline (Liste_airlines, Liste_IATA);
 
 int flight_already_in_list (Flight, Liste_flights);
 
-void show_flights (char*, Date, Liste_flights, int); // optionnel : heure de début et nombre limites de vol à afficher
+void show_flights (char*, Date, Liste_flights, int, int); // optionnel : heure de début et nombre limites de vol à afficher
 
 int same_date(Date, Date);
 

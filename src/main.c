@@ -28,7 +28,7 @@ int main ()
 	
 	printf("3e requete :\n");
 	Date d = {1,1};
-	show_flights("LAX",d,l_flights, 10);
+	show_flights("LAX",d,l_flights, 10, 1700);
 	
 
     free_lflights (&l_flights);
