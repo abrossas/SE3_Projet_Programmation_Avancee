@@ -233,7 +233,7 @@ void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_fligh
 
 //---------- QUATRIEME REQUETE ----------//
 
-int min_tab_flight(Tab_flights tab_flights) { // retourne l'indice du vol ayant le plus petit retard parmi le tableau de flights
+int min_tab_flight(Flight tab_flights[MAX_MOST]) { // retourne l'indice du vol ayant le plus petit retard parmi le tableau de flights
     int i_min = 0;
     int min = tab_flights[0].arr_delay;
     for (int i=1; i<MAX_MOST; i++) {
@@ -245,17 +245,17 @@ int min_tab_flight(Tab_flights tab_flights) { // retourne l'indice du vol ayant 
     return i_min;
 }
 
-void elt_more_tab(Flight flight, Tab_flights tab_flights) { // si le retard du vol flight est supérieur au minimum des retards des vols de tab_flights alors il prend sa place
-    i_min = min_tab_flight(tab_flights);
+void elt_more_tab(Flight flight, Flight tab_flights[MAX_MOST]) { // si le retard du vol flight est supérieur au minimum des retards des vols de tab_flights alors il prend sa place
+    int i_min = min_tab_flight(tab_flights);
     if (flight.arr_delay>tab_flights[i_min].arr_delay) {
         tab_flights[i_min] = flight;
     }
 }
 
 void most_delayed_flights (Liste_flights l_flights) {
-    Flights tab_flights[MAX_MOST];
+    Flight tab_flights[MAX_MOST];
     while (l_flights != NULL) { // on parcourt tous les éléments et on récupère les 5 vols qui ont subis les plus longs retards à l'arrivée dans le tableau tab_flights
-        Flight tmp = Liste_flights->flight;
+        Flight tmp = l_flights->flight;
         elt_more_tab(tmp, tab_flights);
         l_flights = l_flights->pnext_fli;
     }
@@ -263,7 +263,7 @@ void most_delayed_flights (Liste_flights l_flights) {
     printf("---------------- LES 5 VOLS QUI ONT SUBI LE PLUS DE RETARD A L'ARRIVEE ----------------\n");
 
     for (int i=0; i<MAX_MOST; i++) {
-        tmp = tab_flights[i];
+        Flight tmp = tab_flights[i];
         char weekday[MAX_WEEKDAY];
         convert_int_to_weekday(tmp.day,weekday);
 	    char hourdep[MAX_HOUR];

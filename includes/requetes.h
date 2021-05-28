@@ -35,7 +35,7 @@ void convert_int_to_weekday(int, char*);
 
 void convert_int_to_yes(int, char*);
 
-void convert_int_to_hour(int, char*, char*)
+void convert_int_to_hour(int, char*, char*);
 
 //----------- FONCTIONS SPECIFIQUES A UNE REQUETE -----------//
 
@@ -67,9 +67,9 @@ void info_flight(Liste_flights, int max);
 
 void most_delayed_flights (Liste_flights);
 
-void elt_more_tab(Flight, Tab_flights);
+void elt_more_tab(Flight, Flight[MAX_MOST]);
 
-int min_tab_flight(Tab_flights);
+int min_tab_flight(Flight[MAX_MOST]);
 
 
 void most_delayed_airlines (Liste_flights, Liste_airlines);
