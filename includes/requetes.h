@@ -22,7 +22,7 @@ typedef struct Date // on utilise cette structure pour stocker des dates de dép
 
 //----------- FONCTIONS POUR LES REQUETES -----------//
 
-void add_head_iata(Liste_IATA *, char *);
+void add_head_iata (Liste_IATA *, char *);
 
 // REQUETE 1 : show-airport
 
@@ -34,7 +34,7 @@ void info_airport (Liste_airports, Liste_IATA);
 
 // REQUETE 2 : show-airline
 
-int airline_already_in_list (Liste_IATA, char*);
+int airline_already_in_list (Liste_IATA, char *);
 
 void show_airlines (char *, Liste_airlines, Liste_flights);
 
@@ -45,7 +45,6 @@ void info_airline (Liste_airlines, Liste_IATA);
 int flight_already_in_list (Flight, Liste_flights);
 
 void show_flights (char *, char); // optionnel : heure de début et nombre limites de vol à afficher
-
 
 
 void most_delayed_flights (Liste_flights);
