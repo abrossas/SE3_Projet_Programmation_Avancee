@@ -12,12 +12,14 @@ void add_head_flight(Liste_flights *pliste, Flight flight) {
 	*pliste = new;
 }
 
+// void add_head_airline(Liste_airlines *pliste, Airline airline)
+
+// void add_head_airport(Liste_airport *pliste, Airport airport)
+
 void read_flight(Liste_flights *pl_flights, char* line) { 
 // cette fonction sert à lire une ligne du fichier CSV des flights et à mettre les données dans une structure Flight puis à la mettre dans la liste des flights
 	char* strToken;
 	char* Token[14];
-	
-	struct cell_flight *new_flight = malloc(sizeof(struct cell_flight));
 
 	for (int i=0;i<14;i++) {
 		strToken = strsep(&line,","); // strsep permet de séparer la chaine de caractère et renvoie la chaine de caractère juste avant l'apparition de ","
@@ -48,9 +50,7 @@ void read_flight(Liste_flights *pl_flights, char* line) {
 
 //------------------ AJOUT DU NOUVEAU FLIGHT A LA LISTE ------------------//  
 
-	new_flight->flight = flight;
-	new_flight->pnext_fli = *pl_flights;
-	*pl_flights = new_flight;
+	add_head_flight(pl_flights,flight);
 
 }		
 
@@ -104,6 +104,10 @@ int load_flights(FILE* f_flights, Liste_flights *pl_flights) { // Retourne 1 si 
 	return 1;
 }
 
+// int load_airlines(FILE* f_airlines, Liste_airlines *pl_airlines)
+
+// int load_airports(FILE* f_airports, Liste_airports *pl_airports)
+
 void free_lflights(Liste_flights *pl_flights) {
 	while (*pl_flights != NULL) {
 		struct cell_flight* tmp = *pl_flights;
@@ -111,3 +115,8 @@ void free_lflights(Liste_flights *pl_flights) {
 		*pl_flights = tmp->pnext_fli;
 	}
 }
+
+// void free_lairlines(Liste_airlines *pl_airlines) //
+
+// void free_lairports(Liste_airports *pl_airports) //
+
