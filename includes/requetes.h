@@ -71,8 +71,14 @@ void elt_more_tab(Flight, Flight[MAX_MOST]);
 
 int min_tab_flight(Flight[MAX_MOST]);
 
+void init_tab_flights_arr_delay(Flight*);
 
-void most_delayed_airlines (Liste_flights, Liste_airlines);
+// REQUETE 5 : most-delayed-airlines
+
+void most_delayed_airlines(Liste_flights, Liste_airlines);
+
+int mean_delay_airline(Airline, Liste_flights);
+
 
 void delayed_airline (char *, Liste_airlines);
 

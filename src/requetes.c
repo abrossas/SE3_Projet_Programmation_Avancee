@@ -245,18 +245,25 @@ int min_tab_flight(Flight tab_flights[MAX_MOST]) { // retourne l'indice du vol a
     return i_min;
 }
 
-void elt_more_tab(Flight flight, Flight tab_flights[MAX_MOST]) { // si le retard du vol flight est supérieur au minimum des retards des vols de tab_flights alors il prend sa place
+void elt_more_tab_flights(Flight flight, Flight tab_flights[MAX_MOST]) { // si le retard du vol flight est supérieur au minimum des retards des vols de tab_flights alors il prend sa place
     int i_min = min_tab_flight(tab_flights);
     if (flight.arr_delay>tab_flights[i_min].arr_delay) {
         tab_flights[i_min] = flight;
     }
 }
 
+void init_tab_flights_arr_delay(Flight *pflight) {
+	pflight->arr_delay = 0; // On met arr_delay à 0 car on veut trouver des arr_delay très grands
+}
+
 void most_delayed_flights (Liste_flights l_flights) {
-    Flight tab_flights[MAX_MOST];
+	Flight* tab_flights = malloc(MAX_MOST*sizeof(struct flight));
+    	for (int i=0; i<MAX_MOST; i++) // On initialise les éléments de notre tableau, si on ne fait pas ça le programme bug une fois sur deux
+		init_tab_flights_arr_delay(&tab_flights[i]);
+
     while (l_flights != NULL) { // on parcourt tous les éléments et on récupère les 5 vols qui ont subis les plus longs retards à l'arrivée dans le tableau tab_flights
         Flight tmp = l_flights->flight;
-        elt_more_tab(tmp, tab_flights);
+        elt_more_tab_flights(tmp, tab_flights);
         l_flights = l_flights->pnext_fli;
     }
     
@@ -279,4 +286,58 @@ void most_delayed_flights (Liste_flights l_flights) {
         printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %f -- AIRTIME : %f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
     }
 }
+
+// REQUETE 4 //
+
+typedef struct airline_delay {
+	Airline airline;
+	int mean_delay;
+} Airline_delay;
+
+void init_tab_airlines_delay(Airline_delay* pairline_delay) {
+	pairline_delay->mean_delay = 0;
+}
+
+int mean_delay_airline(Airline airline, Liste_flights) { 
+	// Cette fonction renvoie la moyenne des retards à l'arrivée des vols associés à une companie
+	// On va considérer qu'arriver en avance contre-balance avec le fait d'arriver en retard donc on va garder les ARR_DELAY négatifs
+	int M = 0;
+	int i = 0;
+	while (l_flights != NULL) {
+		Flight tmp = Liste_flights->flight;
+		if (airline.iata_code == tmp.airline) {
+			M += flight.arr_delay;
+			i++;
+		}
+		l_flights = l_flights->pnext_fli
+	}
+	return M/i;
+}
+
+void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
+	// On initialise notre tableau contenant 5 companies avec leur moyenne de retard
+	Airline_delay* tab_airlines_delay = malloc(MAX_MOST*sizeof(struct airline_delay));
+	for (int i=0; i<MAX_MOST; i++)
+		init_tab_airlines_delay(&tab_airlines_delay[i];
+
+	
+	char IATA[MAX_IATA_AIRLINE];
+	char airline[MAX_AIRLINE];
+	while (l_airlines != NULL) {
+		Airline tmp = l_airlines->airline;
+		if (mean_delay_airline(tmp, l_flights) > mean) {
+			mean = mean_delay_airline(tmp, l_flights);
+			strcpy(IATA,tmp.iata_code);
+			strcpy(airline,tmp.airline);
+		}
+		l_airlines = l_airlines->pnext_airl;
+	}
+
+	
+
+
+
+
+
+
 
