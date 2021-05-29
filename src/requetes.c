@@ -5,14 +5,7 @@
 
 #include "../includes/requetes.h"
 
-void add_head_iata (Liste_IATA *pl_iata, char iata[IATA_AIRPORT_MAX])
-{
-    struct cell_IATA *pc = malloc (sizeof (struct cell_IATA));
-    strcpy (pc->iata, iata);
-    pc->p_next = *pl_iata;
-    *pl_iata   = pc;
-}
-
+// Cette fonction convertit un int en jour de la semaine (1 = lundi à 7 = dimanche)
 void convert_int_to_weekday(int d, char weekday[MAX_WEEKDAY]) {
     if (d==1)
         strcpy(weekday,"MONDAY");
@@ -30,146 +23,58 @@ void convert_int_to_weekday(int d, char weekday[MAX_WEEKDAY]) {
         strcpy(weekday,"SUNDAY");
 }
 
+// Cette fonction renvoie 1 si les dates sont égales et 0 sinon
 int same_date(Date d1, Date d2) {
-    // Cette fonction renvoie 1 si les dates sont similaires et 0 sinon
     return d1.day == d2.day && d1.month == d2.month;
 }
 
-void convert_int_to_hour(int h, char hour[MAX_HOUR], char minute[MAX_MINUTE]) { // convertir un int au format "dddd" en 2 chaines de caractères heure et minute
+// Cette fonction convertit un int au format "dddd" en 2 chaines de caractères heure et minute
+void convert_int_to_hour(int h, char hour[MAX_HOUR], char minute[MAX_MINUTE]) {
 	snprintf (hour, MAX_HOUR, "%d",h/100);
 	snprintf (minute, MAX_MINUTE, "%d",h%100);
 	}
 
-void convert_int_to_yes(int x, char c[MAX_DIVER]) { // cette fonction convertit un bouléen (0 ou 1) en NO ou YES
+// Cette fonction convertit un bouléen (0 ou 1) en NO ou YES
+void convert_int_to_yes(int x, char c[MAX_DIVER]) {
 	if (x==0)
 		strcpy(c,"NO");
 	else
 		strcpy(c,"YES");
 }
 
-//---------- PREMIERE REQUETE ----------//
-
-int airport_already_in_list (Liste_IATA l_iata, char iata[IATA_AIRPORT_MAX])
-{
-    // Cette fonction renvoie 1 si un aéroport (identifié par son code IATA) est déjà présent dans une liste chainée de codes IATA et 0 sinon
-    if (l_iata == NULL) return 0;
-    while (l_iata != NULL) // on parcourt la liste chainée, si on trouve un élément similaire à iata, on renvoie 1 et on renvoie 0 si on a parcouru toute la liste sans jamais trouver
+// Cette fonction renvoie 1 si l'aéroport identifié par son code IATA est dans la liste passée en argument et 0 sinon
+int is_airport_in(char airport[IATA_AIRPORT_MAX],Liste_airports l_airports){
+    if (l_airports == NULL)
+        return 0;
+    while (l_airports!=NULL)
     {
-        if (strcmp (iata, l_iata->iata) == 0) return 1;
-        l_iata = l_iata->p_next;
-    }
-    return 0;
-}
-
-void info_airport (Liste_airports l_airports, Liste_IATA l_iata)
-{
-    if (l_airports == NULL) // Ces 2 cas sont pratiquement sûrs de ne jamais être vérifiés
-        return;
-    if (l_iata == NULL) return;
-
-    while (l_airports != NULL) // On parcourt toute la liste des aéroports (qu'on a préalablement load) pour trouver les infos de celui qui correspond au code iata du premier élément de l_iata
-    {
-        if (strcmp (l_iata->iata, l_airports->airport.iata_airports) == 0)
-            printf ("CODE IATA : %s --- AEROPORT : %s --- VILLE : %s --- ETAT : %s\n",
-                    l_airports->airport.iata_airports, l_airports->airport.airport,
-                    l_airports->airport.city, l_airports->airport.state);
+        if (strcmp(airport,l_airports->airport.iata_airports)==0)
+            return 1;
         l_airports = l_airports->pnext_airp;
     }
+    return 0; 
 }
 
-void show_airports (char airline[IATA_AIRPORT_MAX], Liste_airports l_airports, Liste_flights l_flights)
-{
-    Liste_IATA l_iata = NULL;
-    while (l_flights != NULL) // On parcourt la liste des vols pour trouver ceux où la companie passée en argument est concernée pour les mettres dans la liste l_iata initialisée plus haut
+// Cette fonction renvoie 1 si la companie aérienne identifié par son code IATA est dans la liste passée en argument et 0 sinon
+int is_airline_in(char airline[IATA_AIRLINE_MAX],Liste_airlines l_airlines){
+    if (l_airlines == NULL)
+        return 0;
+    while (l_airlines!=NULL)
     {
-        if (strcmp (airline, l_flights->flight.airline) == 0)
-        {
-            if (airport_already_in_list (l_iata, l_flights->flight.org_air) ==
-                0) // ici on vérifie s'il est déjà présent dans la liste afin d'éviter les doublons
-                add_head_iata (&l_iata, l_flights->flight.org_air);
-        }
-        l_flights = l_flights->pnext_fli;
-    }
-
-    if (l_iata == NULL)
-    { // Cas où on n'a trouvé aucun aéroport à afficher (possible erreur de l'utilisateur)
-        printf ("Aucun aéroport ne correspond à la compagnie '%s' que vous avez rentrée\n", airline);
-        return;
-    }
-    printf ("\n-------------------- LISTE DES AEROPORTS DEPUIS LESQUELS LA COMPANIE %s OPERE DES "
-            "VOLS --------------------\n",
-            airline);
-
-    while (l_iata != NULL)
-    { // Cas où on a stocké tous les codes IATA des aéroports à afficher dans la liste l_iata
-        info_airport (l_airports, l_iata);
-        l_iata = l_iata->p_next;
-    }
-    printf ("\n");
-}
-
-//---------- DEUXIEME REQUETE ----------//
-
-int airline_already_in_list (Liste_IATA l_iata, char airline[IATA_AIRLINE_MAX])
-{
-    // Cette fonction renvoie 1 si une companie (identifiée par son code IATA) est déjà présente dans une liste de companies et 0 sinon
-    if (l_iata == NULL) return 0;
-    while (l_iata != NULL) // on parcourt la liste, si on trouve un élément similaire à airline, on renvoie 1 et on renvoie 0 si on a parcouru toute la liste sans jamais trouver
-    {
-        if (strcmp (airline, l_iata->iata) == 0) return 1;
-        l_iata = l_iata->p_next;
-    }
-    return 0;
-}
-
-void info_airline (Liste_airlines l_airlines, Liste_IATA l_iata)
-{
-    if (l_iata == NULL) return;
-    if (l_airlines == NULL) return;
-    while (l_airlines != NULL)
-    {
-        if (strcmp (l_airlines->airline.iata_airlines, l_iata->iata) == 0)
-            printf ("IATA CODE : %s ----------------------------------------------- AIRLINE : %s",
-                    l_airlines->airline.iata_airlines, l_airlines->airline.airline);
+        if (strcmp(airline,l_airlines->airline.iata_airlines)==0)
+            return 1;
         l_airlines = l_airlines->pnext_airl;
     }
+    return 0; 
 }
 
-void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, Liste_flights l_flights)
-{
-    Liste_IATA l_iata = NULL;
-    while (l_flights != NULL)
-    {
-        if (strcmp (port_id, l_flights->flight.org_air) ==
-            0) // On cherche les aéroports de départ pour différents vols qui sont les mêmes que port_id
-        {
-            if (airline_already_in_list (l_iata, l_flights->flight.airline) == 0)
-                add_head_iata (&l_iata, l_flights->flight.airline);
-        }
-        l_flights = l_flights->pnext_fli;
-    }
-
-    if (l_iata == NULL) // Cas où on n'a trouvé aucune companie à afficher (possible erreur de l'utilisateur)
-        return;
-
-    printf ("--------------- LISTE DES COMPANIES AYANT DES VOLS PARTANT DE L'AEROPORT %s "
-            "---------------\n",
-            port_id);
-    while (l_iata != NULL)
-    {
-        info_airline (l_airlines, l_iata);
-        l_iata = l_iata->p_next;
-    }
-}
-
-
-//---------- TROISIEME REQUETE ----------//
-
-int flight_already_in_list (Flight flight, Liste_flights l_flights) {
+// Cette fonction renvoie 1 si le vol est dans la liste passée en argument et 0 sinon
+int is_flight_in (Flight flight, Liste_flights l_flights) {
     if (l_flights == NULL)
             return 0;
     while (l_flights != NULL)
-    { // on parcourt la liste chainée, si on trouve un élément similaire au vol flight, on renvoie 1 et on renvoie 0 si on a parcouru toute la liste sans jamais trouver 
+    { 
+    // On parcourt la liste chainée, si on trouve un élément similaire au vol flight, on renvoie 1 et on renvoie 0 si on a parcouru toute la liste sans jamais trouver 
         Flight tmp = l_flights->flight;
         if (tmp.month == flight.month &&  tmp.day == flight.day &&  tmp.weekday == flight.weekday
 &&  tmp.schep_dep == flight.schep_dep &&  tmp.dist == flight.dist && tmp.sched_arr == flight.sched_arr) 
@@ -179,11 +84,131 @@ int flight_already_in_list (Flight flight, Liste_flights l_flights) {
     return 0;
 }
 
+//---------- PREMIERE REQUETE ----------//
+
+// Cette fonction renvoie toutes les informations des aéroports contenus dans la liste passée en argument
+void info_airport(Liste_airports l_airports)
+{
+    if (l_airports == NULL) 
+        return;
+
+    while (l_airports != NULL) 
+// On parcourt toute la liste des aéroports et on affiche toutes les informations de chaque aéroport
+    {
+       printf ("CODE IATA : %s --- AEROPORT : %s --- VILLE : %s --- ETAT : %s\n", l_airports->airport.iata_airports, l_airports->airport.airport,      l_airports->airport.city, l_airports->airport.state);
+        l_airports = l_airports->pnext_airp;
+    }
+}
+
+// Cette fonction extrait un aéroport identifié par son code IATA
+void extract_airport(Airport* pairport, char airport[IATA_AIRPORT_MAX], Liste_airports l_airports) {
+    if (l_airports == NULL)
+        return;
+    Airport tmp;
+    while (l_airports != NULL) {
+        tmp = l_airports->airport;
+        if (strcmp(airport,tmp.iata_airlines) == 0)
+            *pairport = tmp;
+        l_airports = l_airports->pnext_airp;
+    }
+}
+
+void show_airports (char airline[IATA_AIRPORT_MAX], Liste_airports l_airports, Liste_flights l_flights)
+{
+    Liste_airports l_airports_airline = NULL;
+    while (l_flights != NULL) 
+    // On parcourt la liste des vols pour trouver ceux où la companie passée en argument est concernée pour les mettre dans la liste l_airports_airline initialisée plus haut
+    {
+        Airport tmp;
+        if (strcmp (airline, l_flights->flight.airline) == 0) // On cherche les vols concernés par la companie passée en argument
+        {
+            if (is_airport_in(l_airports_airline, l_flights->flight.org_air) == 0) // Ici on vérifie si l'aéroport est déjà présent dans la liste afin d'éviter les doublons
+            {
+                extract_airport(&tmp, l_flights->flight.org_air, l_airports);
+                add_head_airport(&l_airports_airline, tmp);
+            }
+        }
+        l_flights = l_flights->pnext_fli;
+    }
+
+    if (l_airports_airline == NULL) // Cas où on n'a trouvé aucun aéroport à afficher (possible erreur de l'utilisateur)
+    { 
+        printf ("Aucun aéroport ne correspond à la compagnie '%s' que vous avez saisi\n", airline);
+        return;
+    }
+
+    // Cas où on a stocké tous les aéroports à afficher dans la liste l_airports_airline
+
+    printf ("\n-------------------- LISTE DES AEROPORTS DEPUIS LESQUELS LA COMPANIE %s OPERE DES "
+            "VOLS --------------------\n", airline);
+
+    info_airport(l_airports_airline);
+}
+
+//---------- DEUXIEME REQUETE ----------//
+
+// Cette fonction renvoie toutes les informations des companies contenues dans la liste passée en argument
+void info_airline (Liste_airlines l_airlines)
+{
+    if (l_airlines == NULL) 
+        return;
+    Airline tmp;
+    while (l_airlines != NULL)
+    // On parcourt toute la liste des companies et on affiche toutes les informations de chaque companie
+    {
+        tmp = l_airlines->airline;
+        printf ("IATA CODE : %s ----------------------------------------------- AIRLINE : %s", airline.iata_airlines, airline.airline);
+        l_airlines = l_airlines->pnext_airl;
+    }
+}
+
+// Cette fonction extrait une companie identifiée par son code IATA
+void extract_airline(Airline* pairline, char airline[IATA_AIRLINE_MAX], Liste_airlines l_airlines) {
+    if (l_airlines == NULL)
+        return;
+    Airline tmp;
+    while (l_airlines != NULL) {
+        tmp = l_airlines->airline;
+        if (strcmp(airline,tmp.iata_airlines) == 0)
+            *pairline = tmp;
+        l_airlines = l_airlines->pnext_airl;
+    }
+}
+
+void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, Liste_flights l_flights)
+{
+    Liste_airlines l_airlines_airport = NULL;
+    while (l_flights != NULL)
+    {
+        if (strcmp (port_id, l_flights->flight.org_air) == 0) // On cherche les vols qui ont pour aéroport de départ celui passé en argument
+        {
+            if (is_airline_in(l_airlines_airport, l_flights->flight.airline) == 0) // Ici on vérifie si la companie est déjà présente dans la liste afin d'éviter les doublons
+            {
+                extract_airline(&tmp, l_flights->flight.airline, l_airlines)
+                add_head_airlines(&l_airlines_airport, tmp);
+            }
+        }
+        l_flights = l_flights->pnext_fli;
+    }
+
+    if (l_airports_airline == NULL) // Cas où on n'a trouvé aucune companie à afficher (possible erreur de l'utilisateur)
+        {
+        printf ("Aucune companie ne correspond à l'aéroport de départ '%s' que vous avez saisi\n", port_id);
+        return;
+        }
+    
+    // Cas où on a stocké toutes les companies à afficher dans la liste l_airports_airline
+    printf ("--------------- LISTE DES COMPANIES AYANT DES VOLS PARTANT DE L'AEROPORT %s ---------------\n", port_id);
+    info_airline(l_airlines_airport);
+}
+
+//---------- TROISIEME REQUETE ----------//
+
 void info_flight(Liste_flights l_flights, int max) {
     if (l_flights == NULL)
         return;
     Flight tmp;
-    int i=0; // compteur pour afficher le nombre maximum de vols que l'utilisateur désire voir
+    int i=0; // Compteur pour afficher le nombre maximum de vols que l'utilisateur désire voir
     while (l_flights != NULL && i<max)
     {
         tmp = l_flights->flight;
@@ -211,21 +236,27 @@ void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_fligh
     {
         Flight tmp = l_flights->flight;
         Date d_flight = {tmp.month,tmp.day};
-        if (strcmp (port_id, l_flights->flight.org_air) == 0 && same_date(d,d_flight) && tmp.schep_dep > hourdep) // On cherche les vols qui partent de port_id à la même date que d
+        if (strcmp (port_id, l_flights->flight.org_air) == 0 && same_date(d,d_flight) && tmp.schep_dep > hourdep) 
+        // On cherche les vols qui partent de port_id à la même date que d
         {
-            if (flight_already_in_list (tmp, l_tmp) == 0)
-                add_head_flight(&l_tmp, tmp); // fonction déjà codée dans data.c
+            if (is_flight_in(tmp, l_tmp) == 0)
+                add_head_flight(&l_tmp, tmp);
         }
         l_flights = l_flights->pnext_fli;
     }
 
-    if (l_tmp == NULL) { // Cas où on n'a trouvé aucun vol à afficher
+    if (l_tmp == NULL) { 
+    // Cas où on n'a trouvé aucun vol à afficher
         printf("Aucun vol ne correspond à vos critères de recherche\n");
         return;
     }
+
+    // Cas où on a stocké tous les vols à afficher dans l_tmp
+
     char heuredep[MAX_HOUR];
     char minutedep[MAX_MINUTE];
     convert_int_to_hour(hourdep, heuredep, minutedep);
+
     printf ("--------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d APRES %s:%s (MAX %d PAR DEFAUT A 10)"
             " ---------------\n",port_id,d.month,d.day,heuredep,minutedep,max);
     info_flight(l_tmp, max);
@@ -233,7 +264,8 @@ void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_fligh
 
 //---------- QUATRIEME REQUETE ----------//
 
-int min_tab_flight(Flight tab_flights[MAX_MOST]) { // retourne l'indice du vol ayant le plus petit retard parmi le tableau de flights
+// Cette fonction retourne l'indice du vol ayant le plus petit retard parmi le tableau de flights passé en argument
+int min_tab_flight(Flight tab_flights[MAX_MOST]) {
     int i_min = 0;
     int min = tab_flights[0].arr_delay;
     for (int i=1; i<MAX_MOST; i++) {
@@ -245,28 +277,34 @@ int min_tab_flight(Flight tab_flights[MAX_MOST]) { // retourne l'indice du vol a
     return i_min;
 }
 
-void elt_more_tab_flights(Flight flight, Flight tab_flights[MAX_MOST]) { // si le retard du vol flight est supérieur au minimum des retards des vols de tab_flights alors il prend sa place
+ // Si le retard du vol flight est supérieur au minimum des retards des vols de tab_flights alors il prend sa place
+void elt_more_tab_flights(Flight flight, Flight tab_flights[MAX_MOST]) {
     int i_min = min_tab_flight(tab_flights);
     if (flight.arr_delay>tab_flights[i_min].arr_delay) {
         tab_flights[i_min] = flight;
     }
 }
 
+// Cette fonction initialise un vol avec arr_delay à nul
 void init_tab_flights_arr_delay(Flight *pflight) {
-	pflight->arr_delay = 0; // On met arr_delay à 0 car on veut trouver des arr_delay très grands
+	pflight->arr_delay = 0; // On met arr_delay à 0 car on veut trouver des arr_delay assez grands
 }
 
 void most_delayed_flights (Liste_flights l_flights) {
 	Flight* tab_flights = malloc(MAX_MOST*sizeof(struct flight));
-    	for (int i=0; i<MAX_MOST; i++) // On initialise les éléments de notre tableau, si on ne fait pas ça le programme bug une fois sur deux
+    	for (int i=0; i<MAX_MOST; i++) 
+        // On initialise les éléments de notre tableau, si on ne fait pas ça le programme va bugger une fois sur deux
 		init_tab_flights_arr_delay(&tab_flights[i]);
 
-    while (l_flights != NULL) { // on parcourt tous les éléments et on récupère les 5 vols qui ont subis les plus longs retards à l'arrivée dans le tableau tab_flights
+    while (l_flights != NULL) { 
+        // On parcourt tous les éléments et on récupère les 5 vols qui ont subis les plus longs retards à l'arrivée dans le tableau tab_flights
         Flight tmp = l_flights->flight;
         elt_more_tab_flights(tmp, tab_flights);
         l_flights = l_flights->pnext_fli;
     }
     
+    // Il ne reste plus qu'à afficher tous les vols que le tableau contient
+
     printf("---------------- LES %d VOLS QUI ONT SUBI LE PLUS DE RETARD A L'ARRIVEE ----------------\n", MAX_MOST);
 
     for (int i=0; i<MAX_MOST; i++) {
@@ -289,12 +327,13 @@ void most_delayed_flights (Liste_flights l_flights) {
 
 // REQUETE 5 : most-delayed-airlines //
 
+// Cette fonction initialise une struct Airline_delay (voir requete.h) avec mean_delay à nul
 void init_tab_airlines_delay(Airline_delay* pairline_delay) {
 	pairline_delay->mean_delay = 0;
 }
 
+// Cette fonction renvoie la moyenne des retards à l'arrivée des vols associés à une companie
 float mean_delay_airline(Airline airline, Liste_flights l_flights) { 
-	// Cette fonction renvoie la moyenne des retards à l'arrivée des vols associés à une companie
 	// On va considérer qu'arriver en avance contre-balance avec le fait d'arriver en retard donc on va garder les ARR_DELAY négatifs
 	float M = 0;
 	float i = 0;
@@ -311,7 +350,8 @@ float mean_delay_airline(Airline airline, Liste_flights l_flights) {
 	return M/i;
 }
 
-int min_tab_airlines_delay(Airline_delay tab_airlines_delay[MAX_MOST]) { // retourne l'indice de la companie ayant la plus petite moyenne de retard parmi celles du tableau
+// Cette fonction retourne l'indice de la companie ayant la plus petite moyenne de retard parmi celles du tableau passé en argument
+int min_tab_airlines_delay(Airline_delay tab_airlines_delay[MAX_MOST]) {
     int i_min = 0;
     int min = tab_airlines_delay[0].mean_delay;
     for (int i=1; i<MAX_MOST; i++) {
@@ -329,31 +369,36 @@ void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
 	Airline_delay* tab_airlines_delay = malloc(MAX_MOST*sizeof(struct airline_delay));
 	for (int i=0; i<MAX_MOST; i++)
 		init_tab_airlines_delay(&tab_airlines_delay[i]);
+
 	int i_min;
-	while (l_airlines != NULL) {
+	while (l_airlines != NULL) { 
+        // On parcourt l_airlines et on remplace les valeurs du tableau à chaque fois qu'on trouve une moyenne plus grande que le minimum de celles contenues dans le tableau
 		Airline tmp = l_airlines->airline;
         	i_min = min_tab_airlines_delay(tab_airlines_delay);
         	float mean = mean_delay_airline(tmp, l_flights);
-		if (mean > tab_airlines_delay[i_min].mean_delay) { // Si la moyenne des retards associées à la companie tmp est plus grande que le min des moyennes des retards des companies stockées alors tmp prend sa place
+		if (mean > tab_airlines_delay[i_min].mean_delay) { 
+        // Si la moyenne des retards associées à la companie tmp est plus grande que le min des moyennes des retards des companies stockées alors tmp prend sa place
 			tab_airlines_delay[i_min].airline = tmp;
 			tab_airlines_delay[i_min].mean_delay = mean;
 		}
 		l_airlines = l_airlines->pnext_airl;
 	}
 
-    // On a maintenant notre tableau qui contient les airlines ayant le plus de retard en moyenne à l'arrivée, il suffit de les afficher
+    // On a maintenant notre tableau qui contient les airlines ayant le plus de retard en moyenne à l'arrivée, il suffit alors de les afficher
+
     printf("-------- LES %d COMPANIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE --------\n",MAX_MOST);
     for (int i=0; i<MAX_MOST; i++) {
         printf ("IATA CODE : %s ----------------- AIRLINE : %s ----------------- MEAN_DELAY : %f\n", tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].airline.airline, tab_airlines_delay[i].mean_delay);
     }
 }
 	
-// REQUETE 6 : delayed-airline // On utilisera la fonction mean_delay_airline codé précédemment
+// REQUETE 6 : delayed-airline // On utilisera la fonction mean_delay_airline codée précédemment
 
 void delayed_airline(char iata_airline[IATA_AIRLINE_MAX], Liste_airlines l_airlines, Liste_flights l_flights) {
 	// Pour pouvoir utiliser la fonction codée précédemment, il faut trouver la companie associée au code iata que l'utilisateur va rentrer
 	Airline airline;
 	bool trouve = false; // Ce bouléen permet de prévenir une éventuelle erreur de l'utilisateur et de le prévenir si on ne trouve aucune companie correspondante
+
 	while (l_airlines != NULL && trouve == false) {
 		Airline tmp = l_airlines->airline;
 		if (strcmp(iata_airline,tmp.iata_airlines) == 0) {
@@ -378,6 +423,7 @@ void delayed_airline(char iata_airline[IATA_AIRLINE_MAX], Liste_airlines l_airli
 
 // REQUETE 7 : most-delayed-airlines-at-airport //
 
+// Cette fonction renvoie la moyenne des retards à l'arrivée d'une companie passée en argument et identifiée par son code iata
 float mean_delay_airline_at_airport(char iata_airport[IATA_AIRPORT_MAX], Airline airline, Liste_flights l_flights) {
 	float M = 0;
 	float i = 0;
@@ -399,12 +445,14 @@ void most_delayed_airlines_at_airport(char iata_airport[IATA_AIRPORT_MAX], Liste
 	Airline_delay* tab_airlines_delay = malloc(MAX_MOST2*sizeof(struct airline_delay));
 	for (int i=0; i<MAX_MOST2; i++)
 		init_tab_airlines_delay(&tab_airlines_delay[i]);
+
 	int i_min;
 	while (l_airlines != NULL) {
 		Airline tmp = l_airlines->airline;
-        	i_min = min_tab_airlines_delay(tab_airlines_delay);
-        	float mean = mean_delay_airline_at_airport(iata_airport, tmp, l_flights);
-		if (mean > tab_airlines_delay[i_min].mean_delay) { // Si la moyenne des retards associées à la companie tmp est plus grande que le min des moyennes des retards des companies stockées alors tmp prend sa place
+        i_min = min_tab_airlines_delay(tab_airlines_delay);
+        float mean = mean_delay_airline_at_airport(iata_airport, tmp, l_flights);
+		if (mean > tab_airlines_delay[i_min].mean_delay) { 
+// Si la moyenne des retards associées à la companie tmp est plus grande que le min des moyennes des retards des companies stockées alors tmp prend sa place
 			tab_airlines_delay[i_min].airline = tmp;
 			tab_airlines_delay[i_min].mean_delay = mean;
 		}
@@ -421,14 +469,16 @@ void most_delayed_airlines_at_airport(char iata_airport[IATA_AIRPORT_MAX], Liste
 
 // REQUETE 8 : changed-flights
 
-int is_changed_flight_at_date(Flight flight, Date d) { // Renvoie 1 si le vol flight a été dévié ou annulé à la date d et 0 sinon
+// Cette fonction renvoie 1 si le vol flight a été dévié ou annulé à la date d et 0 sinon
+int is_changed_flight_at_date(Flight flight, Date d) {
 	return ((flight.diverted || flight.cancelled) && flight.month == d.month && flight.day == d.day);
 }
 
 void changed_flights(Date date, Liste_flights l_flights) {
-	Liste_flights l_changed_flights = NULL;
+	Liste_flights l_changed_flights = NULL; // On crée une liste temporaire qui va contenir tous les vols qu'on voudra afficher
 	int i=0;
 	while (l_flights != NULL) {
+        // On parcourt toutes la liste des vols et quand on trouve un vol annulé ou dévié on l'ajoute à la liste des vols à afficher
 		Flight tmp = l_flights->flight;
 		if (is_changed_flight_at_date(tmp, date)) {
 			i++;
@@ -436,13 +486,16 @@ void changed_flights(Date date, Liste_flights l_flights) {
 		}
 		l_flights = l_flights->pnext_fli;
 	}
+
+    // On affiche maintenant les vols contenus dans la liste temporaire
 	printf("-------- LISTE DES VOLS ANNULES OU DEVIES A LA DATE %d/%d --------\n",date.month, date.day);
 	info_flight(l_changed_flights, i);
 }
 
 // REQUETE 9 :
 
-float mean_airtime(Liste_flights l_flights_airtime) { // Donne la moyenne des airtime des vols dans la liste passée en argument
+// Cette fonction retourne la moyenne des airtime des vols dans la liste passée en argument
+float mean_airtime(Liste_flights l_flights_airtime) {
 	float m = 0;
 	float i = 0;
 	Flight tmp;
@@ -457,15 +510,17 @@ float mean_airtime(Liste_flights l_flights_airtime) { // Donne la moyenne des ai
 	return m/i;
 }
 
-int is_flight_between_airports(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIRPORT_MAX], Flight flight) { // Renvoie 1 si le vol flight est entre les aéroports passés en argument
+// Cette fonction renvoie 1 si le vol flight est entre les aéroports passés en argument
+int is_flight_between_airports(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIRPORT_MAX], Flight flight) { 
 	return ((strcmp(airport1,flight.org_air) == 0 && strcmp(airport2,flight.dest_air) == 0) || (strcmp(airport1, flight.dest_air) == 0 && strcmp(airport2, flight.org_air) == 0)); 
 }
 
 void avg_flight_duration(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIRPORT_MAX], Liste_flights l_flights) {
-	Liste_flights l_flights_airtime = NULL;
+	Liste_flights l_flights_airtime = NULL; // On crée une liste temporaire qui va contenir tous les vols entre airport1 et airport2
 	Flight tmp;
 	int nb_flights = 0;
 	while (l_flights != NULL) {
+        // On parcourt tous les vols pour trouver ceux entre les 2 aéroports passés en argument et on les ajoute à la liste temporaire
 		tmp = l_flights->flight;
 		if (is_flight_between_airports(airport1, airport2, tmp)) {
 			add_head_flight(&l_flights_airtime, tmp);
@@ -474,7 +529,7 @@ void avg_flight_duration(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIR
 		l_flights = l_flights->pnext_fli;
 	}
 
-	float mean = mean_airtime(l_flights_airtime);
+	float mean = mean_airtime(l_flights_airtime); // On calcule la moyenne des temps de vol
 
 	printf("------- TEMPS DE VOL MOYEN ENTRE LES AEROPORTS %s ET %s : %f (%d VOLS) -------\n",airport1, airport2, mean, nb_flights);
 }
