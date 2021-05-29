@@ -33,6 +33,9 @@ int main ()
 	printf("4e requete :\n");
 	most_delayed_flights(l_flights);
 
+	printf("5e requete :\n");
+	most_delayed_airlines(l_flights, l_airlines);
+
     free_lflights (&l_flights);
     free_lairports (&l_airports); // erreur ici jcp pk tom a toi de jouer lol
     free_lairlines (&l_airlines);

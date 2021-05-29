@@ -86,7 +86,7 @@ void most_delayed_airlines(Liste_flights, Liste_airlines);
 
 int mean_delay_airline(Airline, Liste_flights);
 
-int min_tab_airlines_delay(Airline_delay
+int min_tab_airlines_delay(Airline_delay*);
 
 
 
