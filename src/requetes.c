@@ -287,7 +287,7 @@ void most_delayed_flights (Liste_flights l_flights) {
     }
 }
 
-// REQUETE 4 //
+// REQUETE 5 : most-delayed-airlines //
 
 void init_tab_airlines_delay(Airline_delay* pairline_delay) {
 	pairline_delay->mean_delay = 0;
@@ -324,7 +324,6 @@ int min_tab_airlines_delay(Airline_delay tab_airlines_delay[MAX_MOST]) { // reto
     return i_min;
 }
 
-
 void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
 	// On initialise notre tableau contenant 5 companies avec leur moyenne de retard
 	Airline_delay* tab_airlines_delay = malloc(MAX_MOST*sizeof(struct airline_delay));
@@ -349,6 +348,33 @@ void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
     }
 }
 	
+// REQUETE 6 : delayed-airline // On utilisera la fonction mean_delay_airline codé précédemment
+
+void delayed_airline(char iata_airline[IATA_AIRLINE_MAX], Liste_airlines l_airlines, Liste_flights l_flights) {
+	// Pour pouvoir utiliser la fonction codée précédemment, il faut trouver la companie associée au code iata que l'utilisateur va rentrer
+	Airline airline;
+	bool trouve = false; // Ce bouléen permet de prévenir une éventuelle erreur de l'utilisateur et de le prévenir si on ne trouve aucune companie correspondante
+	while (l_airlines != NULL && trouve == false) {
+		Airline tmp = l_airlines->airline;
+		if (strcmp(iata_airline,tmp.iata_airlines) == 0) {
+			trouve = true;
+			airline = tmp;
+		}
+		l_airlines = l_airlines->pnext_airl;
+	}
+
+	// Si on a trouvé
+
+	if (trouve) {
+		printf("------ RETARD MOYEN DE LA COMPANIE %s : %d ------\n",iata_airline,mean_delay_airline(airline, l_flights));
+	}
+
+	// Si on a pas trouvé
+
+	else {
+		printf("------ AUCUNE COMPANIE NE CORRESPOND A %s DANS LA BASE DE DONNEES ------\n",iata_airline);
+	}
+}
 
 
 

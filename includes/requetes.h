@@ -88,11 +88,11 @@ int mean_delay_airline(Airline, Liste_flights);
 
 int min_tab_airlines_delay(Airline_delay*);
 
+// REQUETE 6 : delayed-airline (on va utiliser mean_delay_airline de la requête 5)
 
+void delayed_airline (char *, Liste_airlines, Liste_flights);
 
-
-
-void delayed_airline (char *, Liste_airlines);
+// REQUETE 7 :
 
 void most_delayed_airlines_at_airport (char *, Liste_airlines, Liste_airports);
 
