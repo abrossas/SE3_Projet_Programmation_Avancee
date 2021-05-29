@@ -38,11 +38,17 @@ void convert_int_to_yes(int, char*);
 
 void convert_int_to_hour(int, char*, char*);
 
+int is_airport_in(char*, Liste_airports);
+
+int is_airline_in(char*, Liste_airlines);
+
+int is_flight_in(Flight, Liste_flights);
+
 //----------- FONCTIONS SPECIFIQUES A UNE REQUETE -----------//
 
 // REQUETE 1 : show-airport
 
-int airport_already_in_list (Liste_IATA, char *);
+void extract_airport(Airport*, char*, Liste_airports);
 
 void show_airports (char *, Liste_airports, Liste_flights);
 
@@ -50,15 +56,13 @@ void info_airport (Liste_airports, Liste_IATA);
 
 // REQUETE 2 : show-airline
 
-int airline_already_in_list (Liste_IATA, char *);
+void extract_airline(Airline*, char*, Liste_airlines);
 
 void show_airlines (char *, Liste_airlines, Liste_flights);
 
 void info_airline (Liste_airlines, Liste_IATA);
 
 // REQUETE 3 : show-flights
-
-int flight_already_in_list (Flight, Liste_flights);
 
 void show_flights (char*, Date, Liste_flights, int, int); // optionnel : heure de début et nombre limites de vol à afficher
 
