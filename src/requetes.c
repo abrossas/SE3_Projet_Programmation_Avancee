@@ -289,11 +289,6 @@ void most_delayed_flights (Liste_flights l_flights) {
 
 // REQUETE 4 //
 
-typedef struct airline_delay {
-	Airline airline;
-	int mean_delay;
-} Airline_delay;
-
 void init_tab_airlines_delay(Airline_delay* pairline_delay) {
 	pairline_delay->mean_delay = 0;
 }
@@ -314,25 +309,43 @@ int mean_delay_airline(Airline airline, Liste_flights) {
 	return M/i;
 }
 
+int min_tab_airlines_delay(Airline_delay tab_airlines_delay[MAX_MOST]) { // retourne l'indice de la companie ayant la plus petite moyenne de retard parmi celles du tableau
+    int i_min = 0;
+    int min = tab_airlines_delay[0].mean_delay;
+    for (int i=1; i<MAX_MOST; i++) {
+        if (tab_airlines_delay[i].mean_delay < min) {
+            min = tab_airlines_delay[i].mean_delay;
+            i_min = i;
+            
+        }
+    }
+    *mean = min;
+    return i_min;
+}
+
+
 void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
 	// On initialise notre tableau contenant 5 companies avec leur moyenne de retard
 	Airline_delay* tab_airlines_delay = malloc(MAX_MOST*sizeof(struct airline_delay));
 	for (int i=0; i<MAX_MOST; i++)
 		init_tab_airlines_delay(&tab_airlines_delay[i];
 
-	
-	char IATA[MAX_IATA_AIRLINE];
-	char airline[MAX_AIRLINE];
 	while (l_airlines != NULL) {
 		Airline tmp = l_airlines->airline;
-		if (mean_delay_airline(tmp, l_flights) > mean) {
-			mean = mean_delay_airline(tmp, l_flights);
-			strcpy(IATA,tmp.iata_code);
-			strcpy(airline,tmp.airline);
+        i_min = min_tab_airlines_delay(tab_airlines_delay);
+        int mean = mean_delay_airline(tmp, l_flights)
+		if (mean > tab_airlines_delay[i_min].mean_delay) { // Si la moyenne des retards associées à la companie tmp est plus grande que le min des moyennes des retards des companies stockées alors tmp prend sa place
+			tab_airlines_delay[i_min]={tmp,mean};
 		}
 		l_airlines = l_airlines->pnext_airl;
 	}
 
+    // On a maintenant notre tableau qui contient les airlines ayant le plus de retard en moyenne à l'arrivée, il suffit de les afficher
+    printf("-------- LES %d COMPANIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE --------",MAX_MOST);
+    for (int i=0; i<MAX_MOST; i++) {
+        printf ("IATA CODE : %s ----------------- AIRLINE : %s ----------------- MEAN_DELAY : %d", tab_airlines_delay[i].airline.iata_code, tab_airlines_delay[i].airline.airline, tab_airlines_delay[i].mean_delay);
+    }
+}
 	
 
 
