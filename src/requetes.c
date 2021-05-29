@@ -55,7 +55,7 @@ int is_airport_in(char airport[IATA_AIRPORT_MAX],Liste_airports l_airports){
     return 0; 
 }
 
-// Cette fonction renvoie 1 si la companie aérienne identifié par son code IATA est dans la liste passée en argument et 0 sinon
+// Cette fonction renvoie 1 si la compagnie aérienne identifié par son code IATA est dans la liste passée en argument et 0 sinon
 int is_airline_in(char airline[IATA_AIRLINE_MAX],Liste_airlines l_airlines){
     if (l_airlines == NULL)
         return 0;
@@ -147,14 +147,14 @@ void show_airports (char airline[IATA_AIRPORT_MAX], Liste_airports l_airports, L
 
 //---------- DEUXIEME REQUETE ----------//
 
-// Cette fonction renvoie toutes les informations des companies contenues dans la liste passée en argument
+// Cette fonction renvoie toutes les informations des compagnies contenues dans la liste passée en argument
 void info_airline (Liste_airlines l_airlines)
 {
     if (l_airlines == NULL) 
         return;
     Airline tmp;
     while (l_airlines != NULL)
-    // On parcourt toute la liste des companies et on affiche toutes les informations de chaque companie
+    // On parcourt toute la liste des compagnies et on affiche toutes les informations de chaque compagnie
     {
         tmp = l_airlines->airline;
         printf ("IATA CODE : %s ----------------------------------------------- AIRLINE : %s", tmp.iata_airlines, tmp.airline);
@@ -162,7 +162,7 @@ void info_airline (Liste_airlines l_airlines)
     }
 }
 
-// Cette fonction extrait une companie identifiée par son code IATA
+// Cette fonction extrait une compagnie identifiée par son code IATA
 void extract_airline(Airline* pairline, char airline[IATA_AIRLINE_MAX], Liste_airlines l_airlines) {
     if (l_airlines == NULL)
         return;
@@ -182,7 +182,7 @@ void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, L
     {
         if (strcmp (port_id, l_flights->flight.org_air) == 0) // On cherche les vols qui ont pour aéroport de départ celui passé en argument
         {
-            if (is_airline_in(l_flights->flight.airline,l_airlines_airport) == 0) // Ici on vérifie si la companie est déjà présente dans la liste afin d'éviter les doublons
+            if (is_airline_in(l_flights->flight.airline,l_airlines_airport) == 0) // Ici on vérifie si la compagnie est déjà présente dans la liste afin d'éviter les doublons
             {
 		    Airline tmp;
                 extract_airline(&tmp, l_flights->flight.airline, l_airlines);
@@ -192,14 +192,14 @@ void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, L
         l_flights = l_flights->pnext_fli;
     }
 
-    if (l_airlines_airport == NULL) // Cas où on n'a trouvé aucune companie à afficher (possible erreur de l'utilisateur)
+    if (l_airlines_airport == NULL) // Cas où on n'a trouvé aucune compagnie à afficher (possible erreur de l'utilisateur)
         {
-        printf ("Aucune companie ne correspond à l'aéroport de départ '%s' que vous avez saisi\n", port_id);
+        printf ("Aucune compagnie ne correspond à l'aéroport de départ '%s' que vous avez saisi\n", port_id);
         return;
         }
     
-    // Cas où on a stocké toutes les companies à afficher dans la liste l_airports_airline
-    printf ("--------------- LISTE DES COMPANIES AYANT DES VOLS PARTANT DE L'AEROPORT %s ---------------\n", port_id);
+    // Cas où on a stocké toutes les compagnies à afficher dans la liste l_airports_airline
+    printf ("--------------- LISTE DES COMPAGNIES AYANT DES VOLS PARTANT DE L'AEROPORT %s ---------------\n", port_id);
     info_airline(l_airlines_airport);
 }
 
@@ -333,7 +333,7 @@ void init_tab_airlines_delay(Airline_delay* pairline_delay) {
 	pairline_delay->mean_delay = 0;
 }
 
-// Cette fonction renvoie la moyenne des retards à l'arrivée des vols associés à une companie
+// Cette fonction renvoie la moyenne des retards à l'arrivée des vols associés à une compagnie
 float mean_delay_airline(Airline airline, Liste_flights l_flights) { 
 	// On va considérer qu'arriver en avance contre-balance avec le fait d'arriver en retard donc on va garder les ARR_DELAY négatifs
 	float M = 0;
@@ -351,7 +351,7 @@ float mean_delay_airline(Airline airline, Liste_flights l_flights) {
 	return M/i;
 }
 
-// Cette fonction retourne l'indice de la companie ayant la plus petite moyenne de retard parmi celles du tableau passé en argument
+// Cette fonction retourne l'indice de la compagnie ayant la plus petite moyenne de retard parmi celles du tableau passé en argument
 int min_tab_airlines_delay(Airline_delay tab_airlines_delay[MAX_MOST]) {
     int i_min = 0;
     int min = tab_airlines_delay[0].mean_delay;
@@ -366,7 +366,7 @@ int min_tab_airlines_delay(Airline_delay tab_airlines_delay[MAX_MOST]) {
 }
 
 void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
-	// On initialise notre tableau contenant 5 companies avec leur moyenne de retard
+	// On initialise notre tableau contenant 5 compagnies avec leur moyenne de retard
 	Airline_delay* tab_airlines_delay = malloc(MAX_MOST*sizeof(struct airline_delay));
 	for (int i=0; i<MAX_MOST; i++)
 		init_tab_airlines_delay(&tab_airlines_delay[i]);
@@ -378,16 +378,16 @@ void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
         	i_min = min_tab_airlines_delay(tab_airlines_delay);
         	float mean = mean_delay_airline(tmp, l_flights);
 		if (mean > tab_airlines_delay[i_min].mean_delay) { 
-        // Si la moyenne des retards associées à la companie tmp est plus grande que le min des moyennes des retards des companies stockées alors tmp prend sa place
+        // Si la moyenne des retards associées à la companie tmp est plus grande que le min des moyennes des retards des compagnies stockées alors tmp prend sa place
 			tab_airlines_delay[i_min].airline = tmp;
 			tab_airlines_delay[i_min].mean_delay = mean;
 		}
 		l_airlines = l_airlines->pnext_airl;
 	}
 
-    // On a maintenant notre tableau qui contient les airlines ayant le plus de retard en moyenne à l'arrivée, il suffit alors de les afficher
+    // On a maintenant notre tableau qui contient les compagnies ayant le plus de retard en moyenne à l'arrivée, il suffit alors de les afficher
 
-    printf("-------- LES %d COMPANIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE --------\n",MAX_MOST);
+    printf("-------- LES %d COMPAGNIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE --------\n",MAX_MOST);
     for (int i=0; i<MAX_MOST; i++) {
         printf ("IATA CODE : %s ----------------- AIRLINE : %s ----------------- MEAN_DELAY : %f\n", tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].airline.airline, tab_airlines_delay[i].mean_delay);
     }
@@ -396,9 +396,9 @@ void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
 // REQUETE 6 : delayed-airline // On utilisera la fonction mean_delay_airline codée précédemment
 
 void delayed_airline(char iata_airline[IATA_AIRLINE_MAX], Liste_airlines l_airlines, Liste_flights l_flights) {
-	// Pour pouvoir utiliser la fonction codée précédemment, il faut trouver la companie associée au code iata que l'utilisateur va rentrer
+	// Pour pouvoir utiliser la fonction codée précédemment, il faut trouver la compagnie associée au code iata que l'utilisateur va rentrer
 	Airline airline;
-	bool trouve = false; // Ce bouléen permet de prévenir une éventuelle erreur de l'utilisateur et de le prévenir si on ne trouve aucune companie correspondante
+	bool trouve = false; // Ce bouléen permet de prévenir une éventuelle erreur de l'utilisateur et de le prévenir si on ne trouve aucune compagnie correspondante
 
 	while (l_airlines != NULL && trouve == false) {
 		Airline tmp = l_airlines->airline;
@@ -412,19 +412,19 @@ void delayed_airline(char iata_airline[IATA_AIRLINE_MAX], Liste_airlines l_airli
 	// Si on a trouvé
 
 	if (trouve) {
-		printf("------ RETARD MOYEN DE LA COMPANIE %s : %f ------\n",iata_airline,mean_delay_airline(airline, l_flights));
+		printf("------ RETARD MOYEN DE LA COMPAGNIE %s : %f ------\n",iata_airline,mean_delay_airline(airline, l_flights));
 	}
 
 	// Si on a pas trouvé
 
 	else {
-		printf("------ AUCUNE COMPANIE NE CORRESPOND A %s DANS LA BASE DE DONNEES ------\n",iata_airline);
+		printf("------ AUCUNE COMPAGNIE NE CORRESPOND A %s DANS LA BASE DE DONNEES ------\n",iata_airline);
 	}
 }
 
 // REQUETE 7 : most-delayed-airlines-at-airport //
 
-// Cette fonction renvoie la moyenne des retards à l'arrivée d'une companie passée en argument et identifiée par son code iata
+// Cette fonction renvoie la moyenne des retards à l'arrivée d'une compagnie passée en argument et identifiée par son code iata
 float mean_delay_airline_at_airport(char iata_airport[IATA_AIRPORT_MAX], Airline airline, Liste_flights l_flights) {
 	float M = 0;
 	float i = 0;
@@ -442,7 +442,7 @@ float mean_delay_airline_at_airport(char iata_airport[IATA_AIRPORT_MAX], Airline
 }
 
 void most_delayed_airlines_at_airport(char iata_airport[IATA_AIRPORT_MAX], Liste_airlines l_airlines, Liste_flights l_flights) {
-	// On initialise notre tableau contenant 3 companies avec leur moyenne de retard à l'arrivée de l'aéroport
+	// On initialise notre tableau contenant 3 compagnies avec leur moyenne de retard à l'arrivée de l'aéroport
 	Airline_delay* tab_airlines_delay = malloc(MAX_MOST2*sizeof(struct airline_delay));
 	for (int i=0; i<MAX_MOST2; i++)
 		init_tab_airlines_delay(&tab_airlines_delay[i]);
@@ -453,7 +453,7 @@ void most_delayed_airlines_at_airport(char iata_airport[IATA_AIRPORT_MAX], Liste
         i_min = min_tab_airlines_delay(tab_airlines_delay);
         float mean = mean_delay_airline_at_airport(iata_airport, tmp, l_flights);
 		if (mean > tab_airlines_delay[i_min].mean_delay) { 
-// Si la moyenne des retards associées à la companie tmp est plus grande que le min des moyennes des retards des companies stockées alors tmp prend sa place
+// Si la moyenne des retards associées à la compagnie tmp est plus grande que le min des moyennes des retards des compagnies stockées alors tmp prend sa place
 			tab_airlines_delay[i_min].airline = tmp;
 			tab_airlines_delay[i_min].mean_delay = mean;
 		}
@@ -462,7 +462,7 @@ void most_delayed_airlines_at_airport(char iata_airport[IATA_AIRPORT_MAX], Liste
 
     // On a maintenant notre tableau qui contient les airlines ayant le plus de retard en moyenne à l'arrivée, il suffit de les afficher
 
-    printf("-------- LES %d COMPANIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE DE L'AEROPORT %s --------\n",MAX_MOST2, iata_airport);
+    printf("-------- LES %d COMPAGNIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE DE L'AEROPORT %s --------\n",MAX_MOST2, iata_airport);
     for (int i=0; i<MAX_MOST2; i++) {
         printf ("IATA CODE : %s ----------------- AIRLINE : %s ----------------- MEAN_DELAY : %f\n", tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].airline.airline, tab_airlines_delay[i].mean_delay);
     }

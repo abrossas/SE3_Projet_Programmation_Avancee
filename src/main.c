@@ -13,9 +13,9 @@ int main ()
     	Liste_airports l_airports = NULL;
     	Liste_airlines l_airlines = NULL;
 	if (load_files(&l_flights, &l_airports, &l_airlines) == 1)
-		printf("------ CHARGEMENT DES DONNEES EFFECTUE ------\n\n\n");
+		printf("--------------------------------------- CHARGEMENT DES DONNEES EFFECTUE ---------------------------------------\n\n\n");
     	else {
-		printf("------ ERREUR LORS DU CHARGEMENT DES DONNEES ------\n\n\n");
+		printf("--------------------------------------- ERREUR LORS DU CHARGEMENT DES DONNEES ----------------------------------------\n\n\n");
 		return 0;
 	}
 	
@@ -25,14 +25,19 @@ int main ()
 	fgets(texte, sizeof(texte), stdin);
 	char *requete;
 	requete = strtok(texte, " ");
+	printf("%s_n", requete);
 	while (strcmp(requete, "quit") != 0) {
 
 		if (strcmp(requete,"show-airports") == 0) // Requête show-airport
 			{
-				requete = strtok(NULL," ");
+				requete = strtok(NULL,"\n");
 				show_airports(requete, l_airports, l_flights);
 			}
-		requete = strtok(
+		printf("%s\n", requete);
+		requete = strtok(NULL, "\n");
+		printf("%s\n",requete);
+	//	printf("%s",requete);
+	//	printf("%d",strcmp(requete, "quit") == 0);
 
 		}
 
@@ -69,8 +74,8 @@ int main ()
 	printf("9e requete :\n");
 	avg_flight_duration("SLC", "LAX", l_flights);
 */
-    free_lflights (&l_flights);
-    free_lairports (&l_airports);
-    free_lairlines (&l_airlines);
+    //free_lflights (&l_flights);
+    //free_lairports (&l_airports);
+    //free_lairlines (&l_airlines);
     return 0;
 }

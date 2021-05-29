@@ -9,29 +9,24 @@
 #define MAX_MOST 5
 #define MAX_MOST2 3
 
-#define MAX_LINE 40
-#define MAX_REQUETE 20
+#define MAX_LINE 254
 
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
-struct cell_IATA // on utilise cette structure de données pour stocker uniquement les codes IATA des aéroports ou airlines pour la requête 1 et 2
-{
-    char              iata[IATA_MAX];
-    struct cell_IATA *p_next;
-};
+// On utilise cette structure lorsqu'il faut afficher les x compagnies ayant le plus de retard en moyenne
+typedef struct airline_delay { 
+	Airline airline;
+	float mean_delay;
+} Airline_delay;
 
-typedef struct cell_IATA *Liste_IATA;
-
-
-typedef struct Date // on utilise cette structure pour stocker des dates de départ
+// On utilise cette structure pour stocker des dates au format M/D
+typedef struct Date
 {
     int month;
     int day;
 } Date;
 
 //----------- FONCTIONS POUR PLUSIEURS REQUETES -----------//
-
-void add_head_iata (Liste_IATA *, char *);
 
 int same_date(Date, Date);
 
@@ -82,11 +77,6 @@ int min_tab_flight(Flight[MAX_MOST]);
 void init_tab_flights_arr_delay(Flight*);
 
 // REQUETE 5 : most-delayed-airlines
-
-typedef struct airline_delay {
-	Airline airline;
-	float mean_delay;
-} Airline_delay;
 
 void init_tab_airlines_delay(Airline_delay*);
 

@@ -1,1 +1,3 @@
-show-airports HA quit
+show-airports HA
+quit
+
