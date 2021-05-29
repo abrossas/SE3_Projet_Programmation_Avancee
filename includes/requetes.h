@@ -10,7 +10,7 @@
 
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
-struct cell_IATA // on utilise cette structure de données pour stocker uniquement les codes IATA des aéroports pour la requête 1 (show-airport)
+struct cell_IATA // on utilise cette structure de données pour stocker uniquement les codes IATA des aéroports ou airlines pour la requête 1 et 2
 {
     char              iata[IATA_MAX];
     struct cell_IATA *p_next;
@@ -75,9 +75,21 @@ void init_tab_flights_arr_delay(Flight*);
 
 // REQUETE 5 : most-delayed-airlines
 
+typedef struct airline_delay {
+	Airline airline;
+	int mean_delay;
+} Airline_delay;
+
+void init_tab_airlines_delay(Airline_delay*);
+
 void most_delayed_airlines(Liste_flights, Liste_airlines);
 
 int mean_delay_airline(Airline, Liste_flights);
+
+int min_tab_airlines_delay(Airline_delay
+
+
+
 
 
 void delayed_airline (char *, Liste_airlines);
