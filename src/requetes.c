@@ -107,7 +107,7 @@ void extract_airport(Airport* pairport, char airport[IATA_AIRPORT_MAX], Liste_ai
     Airport tmp;
     while (l_airports != NULL) {
         tmp = l_airports->airport;
-        if (strcmp(airport,tmp.iata_airlines) == 0)
+        if (strcmp(airport,tmp.iata_airports) == 0)
             *pairport = tmp;
         l_airports = l_airports->pnext_airp;
     }
@@ -122,7 +122,7 @@ void show_airports (char airline[IATA_AIRPORT_MAX], Liste_airports l_airports, L
         Airport tmp;
         if (strcmp (airline, l_flights->flight.airline) == 0) // On cherche les vols concernés par la companie passée en argument
         {
-            if (is_airport_in(l_airports_airline, l_flights->flight.org_air) == 0) // Ici on vérifie si l'aéroport est déjà présent dans la liste afin d'éviter les doublons
+            if (is_airport_in(l_flights->flight.org_air, l_airports_airline) == 0) // Ici on vérifie si l'aéroport est déjà présent dans la liste afin d'éviter les doublons
             {
                 extract_airport(&tmp, l_flights->flight.org_air, l_airports);
                 add_head_airport(&l_airports_airline, tmp);
@@ -157,7 +157,7 @@ void info_airline (Liste_airlines l_airlines)
     // On parcourt toute la liste des companies et on affiche toutes les informations de chaque companie
     {
         tmp = l_airlines->airline;
-        printf ("IATA CODE : %s ----------------------------------------------- AIRLINE : %s", airline.iata_airlines, airline.airline);
+        printf ("IATA CODE : %s ----------------------------------------------- AIRLINE : %s", tmp.iata_airlines, tmp.airline);
         l_airlines = l_airlines->pnext_airl;
     }
 }
@@ -182,16 +182,17 @@ void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, L
     {
         if (strcmp (port_id, l_flights->flight.org_air) == 0) // On cherche les vols qui ont pour aéroport de départ celui passé en argument
         {
-            if (is_airline_in(l_airlines_airport, l_flights->flight.airline) == 0) // Ici on vérifie si la companie est déjà présente dans la liste afin d'éviter les doublons
+            if (is_airline_in(l_flights->flight.airline,l_airlines_airport) == 0) // Ici on vérifie si la companie est déjà présente dans la liste afin d'éviter les doublons
             {
-                extract_airline(&tmp, l_flights->flight.airline, l_airlines)
-                add_head_airlines(&l_airlines_airport, tmp);
+		    Airline tmp;
+                extract_airline(&tmp, l_flights->flight.airline, l_airlines);
+                add_head_airline(&l_airlines_airport, tmp);
             }
         }
         l_flights = l_flights->pnext_fli;
     }
 
-    if (l_airports_airline == NULL) // Cas où on n'a trouvé aucune companie à afficher (possible erreur de l'utilisateur)
+    if (l_airlines_airport == NULL) // Cas où on n'a trouvé aucune companie à afficher (possible erreur de l'utilisateur)
         {
         printf ("Aucune companie ne correspond à l'aéroport de départ '%s' que vous avez saisi\n", port_id);
         return;

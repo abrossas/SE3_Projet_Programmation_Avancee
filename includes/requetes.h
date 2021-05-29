@@ -9,6 +9,9 @@
 #define MAX_MOST 5
 #define MAX_MOST2 3
 
+#define MAX_LINE 40
+#define MAX_REQUETE 20
+
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
 struct cell_IATA // on utilise cette structure de données pour stocker uniquement les codes IATA des aéroports ou airlines pour la requête 1 et 2
@@ -52,7 +55,7 @@ void extract_airport(Airport*, char*, Liste_airports);
 
 void show_airports (char *, Liste_airports, Liste_flights);
 
-void info_airport (Liste_airports, Liste_IATA);
+void info_airport (Liste_airports);
 
 // REQUETE 2 : show-airline
 
@@ -60,7 +63,7 @@ void extract_airline(Airline*, char*, Liste_airlines);
 
 void show_airlines (char *, Liste_airlines, Liste_flights);
 
-void info_airline (Liste_airlines, Liste_IATA);
+void info_airline (Liste_airlines);
 
 // REQUETE 3 : show-flights
 

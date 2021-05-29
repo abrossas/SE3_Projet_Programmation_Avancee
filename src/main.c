@@ -1,26 +1,45 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../includes/requetes.h"
 
 int main ()
 {
+	// 1 - Chargement des données //
 
-    FILE *        f_flights = NULL;
-    Liste_flights l_flights = NULL;
+    	Liste_flights l_flights = NULL;
+    	Liste_airports l_airports = NULL;
+    	Liste_airlines l_airlines = NULL;
+	if (load_files(&l_flights, &l_airports, &l_airlines) == 1)
+		printf("------ CHARGEMENT DES DONNEES EFFECTUE ------\n\n\n");
+    	else {
+		printf("------ ERREUR LORS DU CHARGEMENT DES DONNEES ------\n\n\n");
+		return 0;
+	}
+	
+	// 2 - Interface utilisateur //
+	
+	char texte[MAX_LINE];
+	fgets(texte, sizeof(texte), stdin);
+	char *requete;
+	requete = strtok(texte, " ");
+	while (strcmp(requete, "quit") != 0) {
 
-    FILE *         f_airports = NULL;
-    Liste_airports l_airports = NULL;
+		if (strcmp(requete,"show-airports") == 0) // Requête show-airport
+			{
+				requete = strtok(NULL," ");
+				show_airports(requete, l_airports, l_flights);
+			}
+		requete = strtok(
 
-    FILE *         f_airlines = NULL;
-    Liste_airlines l_airlines = NULL;
+		}
 
-    printf ("%d\n", load_flights (f_flights, &l_flights));
-    printf ("%d\n", load_airports (f_airports, &l_airports));
-    printf ("%d\n", load_airlines (f_airlines, &l_airlines));
+	
+	
 
-    printf ("1ere requête :\n");
+/*    printf ("1ere requête :\n");
     show_airports ("UA", l_airports, l_flights);
 
     printf ("2e requete :\n");
@@ -49,7 +68,7 @@ int main ()
 	
 	printf("9e requete :\n");
 	avg_flight_duration("SLC", "LAX", l_flights);
-
+*/
     free_lflights (&l_flights);
     free_lairports (&l_airports);
     free_lairlines (&l_airlines);
