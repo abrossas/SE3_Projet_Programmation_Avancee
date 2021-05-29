@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../includes/requetes.h"
+#include "../includes/interface.h"
 
 int main ()
 {
@@ -20,62 +20,99 @@ int main ()
 	}
 	
 	// 2 - Interface utilisateur //
-	
-	char texte[MAX_LINE];
-	fgets(texte, sizeof(texte), stdin);
-	char *requete;
-	requete = strtok(texte, " ");
-	printf("%s_n", requete);
-	while (strcmp(requete, "quit") != 0) {
+			
+	char* line = NULL;
+	size_t n = 0;
+	getline(&line, &n, stdin);
+	while (strcmp(line,"quit\n") != 0) {
+			
+			char* requete = NULL;
+			requete = strtok(line, " ");
 
-		if (strcmp(requete,"show-airports") == 0) // Requête show-airport
+			if (strcmp(requete,"show-airports") == 0) // Requête show-airport <airline_id>
 			{
-				requete = strtok(NULL,"\n");
+				requete = strtok(NULL,"\n"); // requete <- airline_id
 				show_airports(requete, l_airports, l_flights);
 			}
-		printf("%s\n", requete);
-		requete = strtok(NULL, "\n");
-		printf("%s\n",requete);
-	//	printf("%s",requete);
-	//	printf("%d",strcmp(requete, "quit") == 0);
+			
+			if (strcmp(requete, "show-airlines") == 0) // Requete show-airlines <port_id>
+			{
+				requete = strtok(NULL, "\n"); // requete <- port_id
+				show_airlines(requete, l_airlines, l_flights);
+			}
 
+			if (strcmp(requete, "show-flights") == 0) // Requete show-flights <port_id> <date> [<time>] [limit=<xx>]
+			{
+				requete = strtok(NULL, " "); // requete <- port_id
+				char port_id[IATA_AIRPORT_MAX];
+				strcpy(port_id,requete); // requete <- "m/d"
+				requete = strtok(NULL, " ");
+				Date d = convert_md_to_date(requete); // On convertit "m/d" en une date
+				
+				int time = 0; // On initialise par défaut time à 0 (pour 00:00)
+				int max = 10; // Et max à 10	
+
+				// Traitement des arguments optionnels (ne fonctionne pas)
+/*
+				requete = strtok(NULL, " ");
+				printf("%s",requete);
+				if (requete != NULL) { // L'utilisateur a bien rentré une heure
+					time = atoi(requete); // On redéfinit time
+					printf("%d",time);
+				}
+				requete = strtok(NULL, " ");
+				if (requete != NULL) // Si l'utilisateur a aussi rentré un nombre maximal de vols à afficher
+					max = atoi(requete); // On redéfinit donc max
+*/
+
+				show_flights(port_id, d, l_flights, max, time);
+			}
+			
+			if (strcmp(requete, "most-delayed-flights\n") == 0) // Requete most-delayed-flights
+				{
+				printf("ici\n");
+				most_delayed_flights(l_flights);
+				}
+
+			if (strcmp(requete, "most-delayed-airlines\n") == 0) // Requete most-delayed-airlines
+				most_delayed_airlines(l_flights, l_airlines);
+			
+			if (strcmp(requete, "delayed-airline") == 0) // Requete delayed-airline <airline_id>
+			{
+				requete = strtok(NULL, "\n"); // requete <- airline_id
+				delayed_airline(requete, l_airlines, l_flights);
+			}
+
+			if (strcmp(requete, "most-delayed-airlines-at-airport") == 0) // Requete most-delayed-airlines-at-airport <port_id>
+			{
+				requete = strtok(NULL, "\n"); // requete <- port_id
+				most_delayed_airlines_at_airport(requete, l_airlines, l_flights);
+			}
+
+			if (strcmp(requete, "changed-flights") == 0) // Requete changed_flights <date>
+			{
+				requete = strtok(NULL, "\n"); // requete <- "m/d"
+				Date d = convert_md_to_date(requete);
+				changed_flights(d, l_flights);
+			}
+
+			if (strcmp(requete, "avg-flight-duration") == 0) // Requete avg-flight-duration <port_id> <port_id>
+			{
+				requete = strtok(NULL, " "); // requete <- port_id1
+				char port_id[IATA_AIRPORT_MAX];
+				strcpy(port_id, requete);
+				requete = strtok(NULL, " "); // requete <- port_id2
+				avg_flight_duration(port_id, requete, l_flights);
+			}
+
+		getline(&line, &n, stdin); // On traite une nouvelle ligne
 		}
 
-	
-	
+	// 3 - Désallocation de l'espace
 
-/*    printf ("1ere requête :\n");
-    show_airports ("UA", l_airports, l_flights);
+    	free_lflights (&l_flights);
+    	free_lairports (&l_airports);
+    	free_lairlines (&l_airlines);
 
-    printf ("2e requete :\n");
-    show_airlines ("LAX", l_airlines, l_flights);
-	
-	printf("3e requete :\n");
-	Date d = {1,1};
-	show_flights("LAX",d,l_flights, 10, 1700);
-
-	printf("4e requete :\n");
-	most_delayed_flights(l_flights);
-
-	printf("5e requete :\n");
-	most_delayed_airlines(l_flights, l_airlines);
-
-	printf("6e requete :\n");
-	delayed_airline("UA", l_airlines, l_flights);
-	delayed_airline("ZZ", l_airlines, l_flights);
-
-	printf("7e requete :\n");
-	most_delayed_airlines_at_airport("SLC",l_airlines,l_flights);
-
-	printf("8e requete :\n");
-	Date d2 = {12,24};
-	changed_flights(d2, l_flights);
-	
-	printf("9e requete :\n");
-	avg_flight_duration("SLC", "LAX", l_flights);
-*/
-    //free_lflights (&l_flights);
-    //free_lairports (&l_airports);
-    //free_lairlines (&l_airlines);
-    return 0;
+    	return 0;
 }

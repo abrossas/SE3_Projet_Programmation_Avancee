@@ -228,6 +228,7 @@ void info_flight(Liste_flights l_flights, int max) {
 
         printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %f -- AIRTIME : %f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
         l_flights = l_flights->pnext_fli;
+	i++;
     }
 }
 
