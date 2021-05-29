@@ -419,10 +419,28 @@ void most_delayed_airlines_at_airport(char iata_airport[IATA_AIRPORT_MAX], Liste
     }
 }
 
+// REQUETE 8 : changed-flights
 
+int is_changed_flight_at_date(Flight flight, Date d) { // Renvoie 1 si le vol flight a été dévié ou annulé à la date d et 0 sinon
+	return ((flight.diverted || flight.cancelled) && flight.month == d.month && flight.day == d.day);
+}
 
+void changed_flights(Date date, Liste_flights l_flights) {
+	Liste_flights l_changed_flights = NULL;
+	int i=0;
+	while (l_flights != NULL) {
+		Flight tmp = l_flights->flight;
+		if (is_changed_flight_at_date(tmp, date)) {
+			i++;
+			add_head_flight(&l_changed_flights, tmp);
+		}
+		l_flights = l_flights->pnext_fli;
+	}
+	printf("-------- LISTE DES VOLS ANNULES OU DEVIES A LA DATE %d/%d --------\n",date.month, date.day);
+	info_flight(l_changed_flights, i);
+}
 
-
+// REQUETE 9 :
 
 
 

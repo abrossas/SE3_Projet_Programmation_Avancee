@@ -99,9 +99,13 @@ void most_delayed_airlines_at_airport (char *, Liste_airlines, Liste_flights);
 
 float mean_delay_airline_at_airport(char *, Airline, Liste_flights);
 
-//
+// REQUETE 8 : changed-flights
 
-void changed_flights (char *);
+void changed_flights (Date, Liste_flights);
+
+int is_changed_flight_at_date(Flight, Date);
+
+//
 
 void avg_flight_duration (char *, char *);
 
