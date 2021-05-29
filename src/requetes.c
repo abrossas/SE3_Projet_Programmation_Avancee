@@ -442,5 +442,43 @@ void changed_flights(Date date, Liste_flights l_flights) {
 
 // REQUETE 9 :
 
+float mean_airtime(Liste_flights l_flights_airtime) { // Donne la moyenne des airtime des vols dans la liste passée en argument
+	float m = 0;
+	float i = 0;
+	Flight tmp;
+	while (l_flights_airtime != NULL) {
+		tmp = l_flights_airtime->flight;
+		m += tmp.air_time;
+		i++;
+		l_flights_airtime = l_flights_airtime->pnext_fli;
+	}
+	if (i==0)
+		return 0;
+	return m/i;
+}
+
+int is_flight_between_airports(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIRPORT_MAX], Flight flight) { // Renvoie 1 si le vol flight est entre les aéroports passés en argument
+	return ((strcmp(airport1,flight.org_air) == 0 && strcmp(airport2,flight.dest_air) == 0) || (strcmp(airport1, flight.dest_air) == 0 && strcmp(airport2, flight.org_air) == 0)); 
+}
+
+void avg_flight_duration(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIRPORT_MAX], Liste_flights l_flights) {
+	Liste_flights l_flights_airtime = NULL;
+	Flight tmp;
+	int nb_flights = 0;
+	while (l_flights != NULL) {
+		tmp = l_flights->flight;
+		if (is_flight_between_airports(airport1, airport2, tmp)) {
+			add_head_flight(&l_flights_airtime, tmp);
+		}
+		nb_flights++;
+		l_flights = l_flights->pnext_fli;
+	}
+
+	float mean = mean_airtime(l_flights_airtime);
+
+	printf("------- TEMPS DE VOL MOYEN ENTRE LES AEROPORTS %s ET %s : %f (%d VOLS) -------\n",airport1, airport2, mean, nb_flights);
+}
+
+// REQUETE 10 :
 
 

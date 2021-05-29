@@ -105,8 +105,16 @@ void changed_flights (Date, Liste_flights);
 
 int is_changed_flight_at_date(Flight, Date);
 
-//
+// REQUETE 9 : avg-flight-duration
 
-void avg_flight_duration (char *, char *);
+void avg_flight_duration (char *, char *, Liste_flights);
 
-void find_itinerary (char *, char *, char *); // optionnel : préciser l'heure, limité à X propositions
+float mean_airtime(Liste_flights);
+
+int is_flight_between_airports(char*, char*, Flight);
+
+// REQUETE 10 : find_itinerary
+
+void find_itinerary (char *, char *, char *, int, int, Liste_flights); // optionnel : préciser l'heure, limité à X propositions
+
+

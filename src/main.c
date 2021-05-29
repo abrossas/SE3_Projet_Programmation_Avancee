@@ -46,6 +46,9 @@ int main ()
 	printf("8e requete :\n");
 	Date d2 = {12,24};
 	changed_flights(d2, l_flights);
+	
+	printf("9e requete :\n");
+	avg_flight_duration("SLC", "LAX", l_flights);
 
     free_lflights (&l_flights);
     free_lairports (&l_airports);
