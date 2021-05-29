@@ -7,6 +7,7 @@
 #define MAX_HOUR 3
 #define MAX_MINUTE 3
 #define MAX_MOST 5
+#define MAX_MOST2 3
 
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
@@ -77,14 +78,14 @@ void init_tab_flights_arr_delay(Flight*);
 
 typedef struct airline_delay {
 	Airline airline;
-	int mean_delay;
+	float mean_delay;
 } Airline_delay;
 
 void init_tab_airlines_delay(Airline_delay*);
 
 void most_delayed_airlines(Liste_flights, Liste_airlines);
 
-int mean_delay_airline(Airline, Liste_flights);
+float mean_delay_airline(Airline, Liste_flights);
 
 int min_tab_airlines_delay(Airline_delay*);
 
@@ -92,9 +93,13 @@ int min_tab_airlines_delay(Airline_delay*);
 
 void delayed_airline (char *, Liste_airlines, Liste_flights);
 
-// REQUETE 7 :
+// REQUETE 7 : most-delayed-airlines-at-airports (on utilisera min_tab_arlines_delay et la structure définie dans la requete 5)
 
-void most_delayed_airlines_at_airport (char *, Liste_airlines, Liste_airports);
+void most_delayed_airlines_at_airport (char *, Liste_airlines, Liste_flights);
+
+float mean_delay_airline_at_airport(char *, Airline, Liste_flights);
+
+//
 
 void changed_flights (char *);
 
