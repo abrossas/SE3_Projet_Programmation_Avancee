@@ -288,7 +288,7 @@ void elt_more_tab_flights(Flight flight, Flight tab_flights[MAX_MOST]) {
 
 // Cette fonction initialise un vol avec arr_delay à nul
 void init_tab_flights_arr_delay(Flight *pflight) {
-	pflight->arr_delay = 0; // On met arr_delay à 0 car on veut trouver des arr_delay assez grands
+	pflight->arr_delay = 0; // On met arr_delay à 0 car on veut trouver des arr_delay assez grands (comme on a mis -1 pour les valeurs manquantes, si arr_delay est à -1 il ne prendra pas la place d'un vol qui a vraiment eu lieu)
 }
 
 void most_delayed_flights (Liste_flights l_flights) {
@@ -340,7 +340,7 @@ float mean_delay_airline(Airline airline, Liste_flights l_flights) {
 	float i = 0;
 	while (l_flights != NULL) {
 		Flight tmp = l_flights->flight;
-		if (strcmp(airline.iata_airlines,tmp.airline) == 0) {
+		if (strcmp(airline.iata_airlines,tmp.airline) == 0 && tmp.cancelled == 0 && tmp.diverted == 0) { // On ne prend pas les vols annulés ou déviés en compte pour le calcul de la moyenne
 			M += tmp.arr_delay;
 			i++;
 		}
@@ -430,7 +430,7 @@ float mean_delay_airline_at_airport(char iata_airport[IATA_AIRPORT_MAX], Airline
 	float i = 0;
 	while (l_flights != NULL) {
 		Flight tmp = l_flights->flight;
-		if (strcmp(iata_airport,tmp.dest_air) == 0 && strcmp(airline.iata_airlines,tmp.airline) == 0) {
+		if (strcmp(iata_airport,tmp.dest_air) == 0 && strcmp(airline.iata_airlines,tmp.airline) == 0 && tmp.diverted == 0 && tmp.cancelled == 0) { // On ne prend pas en compte les vols déviés ou annulés
 			M += tmp.arr_delay;
 			i++;
 		}
@@ -511,9 +511,9 @@ float mean_airtime(Liste_flights l_flights_airtime) {
 	return m/i;
 }
 
-// Cette fonction renvoie 1 si le vol flight est entre les aéroports passés en argument
+// Cette fonction renvoie 1 si le vol flight est entre les aéroports passés en argument et qu'il n'a ni été dévie ni été annulé
 int is_flight_between_airports(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIRPORT_MAX], Flight flight) { 
-	return ((strcmp(airport1,flight.org_air) == 0 && strcmp(airport2,flight.dest_air) == 0) || (strcmp(airport1, flight.dest_air) == 0 && strcmp(airport2, flight.org_air) == 0)); 
+	return ((strcmp(airport1,flight.org_air) == 0 && strcmp(airport2,flight.dest_air) == 0) || (strcmp(airport1, flight.dest_air) == 0 && strcmp(airport2, flight.org_air) == 0 && flight.cancelled == 0 && flight.diverted == 0)); 
 }
 
 void avg_flight_duration(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIRPORT_MAX], Liste_flights l_flights) {

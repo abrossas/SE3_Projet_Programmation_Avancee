@@ -80,7 +80,7 @@ void read_airline (Liste_airlines *pl_airlines, char *line)
         if (strlen (strToken) != 0)
             Token[i] = strToken;
         else                 // cas où 2 virgules se suivent
-            Token[i] = "-1"; // on choisit arbitrairement de mettre -1 pour les valeurs manquantes
+            Token[i] = "-1"; // on choisit arbitrairement de mettre -1 pour les valeurs manquantes (même si il n'y en a aucune dans le fichier que l'on traite)
     }
 
     //------------------ LECTURE DES DONNEES DANS LA STRUCTURE AIRLINE --------------------//
@@ -111,7 +111,7 @@ void read_airport (Liste_airports *pl_airports, char *line)
         }
         else
         {                    // cas où 2 virgules se suivent
-            Token[i] = "-1"; // on choisit arbitrairement de mettre -1 pour les valeurs manquantes
+            Token[i] = "-1"; // on choisit arbitrairement de mettre -1 pour les valeurs manquantes (même s'il y en a aucune dans le fichier que l'on traite)
         }
     }
 
