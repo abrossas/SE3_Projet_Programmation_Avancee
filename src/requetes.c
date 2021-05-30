@@ -544,7 +544,7 @@ void changed_flights (Date date, Liste_flights l_flights)
     }
 
     // On affiche maintenant les vols contenus dans la liste temporaire
-    printf ("-------- LISTE DES VOLS ANNULES OU DEVIES A LA DATE %d/%d --------\n", date.month, date.day);
+    printf ("------------------------ LISTE DES VOLS ANNULES OU DEVIES A LA DATE %d/%d ------------------------\n", date.month, date.day);
     info_flight (l_changed_flights, i);
 }
 
