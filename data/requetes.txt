@@ -1,10 +1,10 @@
 show-airports HA
 show-airlines LAX
-show-flights LAX 11/16
+show-flights LAX 11-16
 most-delayed-flights
 most-delayed-airlines
 delayed-airlines HA
-changed-flights 12/24
+changed-flights 12-24
 avg-flight-duration ORD STL
 most-delayed-airlines-at-airport LAX
 quit

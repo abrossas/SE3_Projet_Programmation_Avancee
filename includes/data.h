@@ -100,4 +100,4 @@ int load_airports (FILE *, Liste_airports *);
 
 int load_airlines (FILE *, Liste_airlines *);
 
-int load_files(Liste_flights*, Liste_airports*, Liste_airlines*);
+int load_files (Liste_flights *, Liste_airports *, Liste_airlines *);

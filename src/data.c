@@ -247,16 +247,13 @@ void free_lairports (Liste_airports *pl_airports)
 }
 
 // Cette fonction charge tous les fichiers dans nos structures de données et renvoie 1 si l'opération a réussi et 0 sinon
-int load_files(Liste_flights *pl_flights, Liste_airports *pl_airports, Liste_airlines *pl_airlines) {
-	FILE *f_flights = NULL;
-	FILE *f_airports = NULL;
-	FILE *f_airlines = NULL;
-	if (load_flights(f_flights, pl_flights) == 0)
-		return 0;
-	if (load_airports(f_airports, pl_airports) == 0)
-		return 0;
-	if (load_airlines(f_airlines, pl_airlines) == 0)
-		return 0;
-	return 1;
+int load_files (Liste_flights *pl_flights, Liste_airports *pl_airports, Liste_airlines *pl_airlines)
+{
+    FILE *f_flights  = NULL;
+    FILE *f_airports = NULL;
+    FILE *f_airlines = NULL;
+    if (load_flights (f_flights, pl_flights) == 0) return 0;
+    if (load_airports (f_airports, pl_airports) == 0) return 0;
+    if (load_airlines (f_airlines, pl_airlines) == 0) return 0;
+    return 1;
 }
-
