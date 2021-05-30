@@ -25,7 +25,7 @@ int main ()
     // 2 - Interface utilisateur //
 
     printf (
-    "Bonjour, vous pouvez rentrer les différentes requêtes et terminer en écrivant quit\n\n");
+    "Bonjour, vous pouvez rentrer les différentes requêtes et terminer en écrivant quit\nVous pouvez taper help pour afficher les informations sur les différentes requêtes disponibles\n\n");
 
     char * line = NULL;
     size_t n    = 0;
@@ -124,8 +124,7 @@ int main ()
             printf ("\n");
         }
 
-        if (strcmp (requete, "find-itinerary") ==
-            0) // Requete find-itinerary <port_id> <port_id> <date> mais ne traite pas les arguments optionnels et renvoie un vol direct sans escale
+        if (strcmp (requete, "find-itinerary") == 0) // Requete find-itinerary <port_id> <port_id> <date> mais ne traite pas les arguments optionnels et renvoie un vol direct sans escale
         {
             requete = strtok (NULL, " ");
             char port_org[IATA_AIRPORT_MAX];
@@ -137,7 +136,12 @@ int main ()
             Date d3 = convert_md_to_date (requete);
             find_itinerary (port_org, port_dest, d3, l_flights);
         }
-
+	
+	if (strcmp(requete, "help\n") == 0) // Help pour afficher les requêtes disponibles, ce qu'elles font et comment les utiliser
+	{
+		printf("-------------------------------------------------------------- HELP ---------------------------------------------------------------\nshow-airports <airline_id> : affiche tous les aéroports depuis lesquels la compagnie aérienne <airline_id> opère des vols\n- show-airlines <port_id> : affiche les compagnies aériens qui ont des vols qui partent de l'aéroport <port_id>\n- show-flights <port_id> <date> [<time>] [limit=<xx>] : affiche les vols qui partent de l'aéroport à la date, avec optionnellement une heure de début, et limité à xx vols (les arguments optionnels ne seront malheureusement pas pris en compte\n- most-delayed-flights : donne les 5 vols qui ont subi les plus longs retards à l'arrivée\n- most-delayed-airlines : donne les 5 compagnies aériennes qui ont, en moyenne, le plus de retards\n- delayed-airline <airline_id> : donne le retard moyen de la compagnie aérienne passée en paramètre\n- most-delayed-airlines-at-airport <airport_id> : donne les 3 compagnies aériennes avec le plus de retard d'arrivée à l'aéroport passé en paramètre\n- changed-flights <date> : les vols annulés ou déviés à la date  (format M-D)\n- avg-flight-duration <port_id> <port_id> : calcule le temps de vol moyen entre deux aéroports\n- find-itinerary <port_id> <port_id> <date> : trouve un vol direct entre les aéroports passés en paramètre à la date voulue\n");
+	}
+	
         getline (&line, &n, stdin); // On traite une nouvelle ligne
     }
 
