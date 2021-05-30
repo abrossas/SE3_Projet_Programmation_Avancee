@@ -42,7 +42,7 @@ Pour ce qui est de la compilation, nous avons respecté les conventions de codag
 
  ## Utilisation
 
-Pour que l'utilisateur puisse utiliser le code il faudra qu'il le compile de la manière vue précedemment puis il faudra se rendre dans **bin** et lancer l'exécutable à l'aide de la commande ** ./exec < ../data/requetes.txt** qui lancera l'interface utilisateur en lisant les instructions comprises dans **requetes.txt**. Pour quitter cette interface, il suffira d'utiliser la commande **quit**.
+Pour que l'utilisateur puisse utiliser le code il faudra qu'il le compile de la manière vue précedemment puis il faudra se rendre dans **bin** et lancer l'exécutable à l'aide de la commande **./exec < ../data/requetes.txt** qui lancera l'interface utilisateur en lisant les instructions comprises dans **requetes.txt**. Pour quitter cette interface, il suffira d'utiliser la commande **quit**.
 
 
 
