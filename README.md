@@ -37,9 +37,11 @@ Pour ce qui est de la compilation, nous avons respecté les conventions de codag
 
 Pour que l'utilisateur puisse utiliser le code il faudra qu'il le compile de la manière vue précedemment puis il faudra se rendre dans **bin** et lancer l'exécutable à l'aide de la commande **./exec** ou **./exec < ../data/requetes.txt** (pour charger les requêtes depuis requetes.txt) qui lancera l'interface utilisateur en lisant les instructions comprises dans **requetes.txt**. Pour quitter cette interface, il suffira d'utiliser la commande **quit** (qui est à la fin de requetes.txt pour quitter l'interface automatiquement si on utilise cette méthode).
 
-## NB
+## Remarques
 
-Bug à résoudre pour l'instant pour la requête **most-delayed-airlines-at-airport**, il faut l'utiliser en dernier et ne pas faire d'autres requêtes par la suite sinon il y a un SegFault (probablement dû à l'utilisation de la fonction **strtok**)
+Bug à résoudre pour l'instant pour la requête **most-delayed-airlines-at-airport**, il faut l'utiliser en dernier et ne pas faire d'autres requêtes par la suite sinon il y a un SegFault (probablement dû à l'utilisation de la fonction **strtok**).
+
+De plus, les arguments optionnels ne fonctionnent pas pour la requête **show-flights <date> <[time]> <[limit=xx]>**, l'utilisateur peut les renseigner mais ils ne seront malheureusement pas pris en compte.
 
 
 
