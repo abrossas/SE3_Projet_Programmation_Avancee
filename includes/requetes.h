@@ -1,15 +1,11 @@
 #include "data.h"
 
-#define IATA_MAX 5
-
 #define MAX_WEEKDAY 10
 #define MAX_DIVER 4
 #define MAX_HOUR 3
 #define MAX_MINUTE 3
 #define MAX_MOST 5
 #define MAX_MOST2 3
-
-#define MAX_LINE 254
 
 //----------- STRUCTURES DE DONNEES POUR LES REQUETES -----------//
 
@@ -113,4 +109,6 @@ int is_flight_between_airports (char *, char *, Flight);
 
 // REQUETE 10 : find_itinerary
 
-void find_itinerary (char *, char *, char *, int, int, Liste_flights); // optionnel : préciser l'heure, limité à X propositions
+int is_direct_flight_date (char *, char *, Date d, Flight);
+
+void find_itinerary (char *, char *, Date d, Liste_flights); // optionnel : préciser l'heure, limité à X propositions

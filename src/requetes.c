@@ -544,7 +544,9 @@ void changed_flights (Date date, Liste_flights l_flights)
     }
 
     // On affiche maintenant les vols contenus dans la liste temporaire
-    printf ("------------------------ LISTE DES VOLS ANNULES OU DEVIES A LA DATE %d/%d ------------------------\n", date.month, date.day);
+    printf ("------------------------ LISTE DES VOLS ANNULES OU DEVIES A LA DATE %d/%d "
+            "------------------------\n",
+            date.month, date.day);
     info_flight (l_changed_flights, i);
 }
 
@@ -599,4 +601,40 @@ void avg_flight_duration (char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AI
             airport1, airport2, mean, nb_flights);
 }
 
-// REQUETE 10 :
+// REQUETE 10 : version simplifiée (trouve des vols directs sans escale)
+
+// Cette fonction renvoie 1 si le vol flight est entre les aéroports d'origine et de destination passés en paramètre à une date donnée
+int is_direct_flight_date (char airport_org[IATA_AIRPORT_MAX], char airport_dest[IATA_AIRPORT_MAX], Date d, Flight flight)
+{
+    return (strcmp (flight.org_air, airport_org) == 0 && strcmp (flight.dest_air, airport_dest) == 0 &&
+            d.month == flight.month && d.day == flight.day);
+}
+
+void find_itinerary (char airport_org[IATA_AIRPORT_MAX], char airport_dest[IATA_AIRPORT_MAX], Date d, Liste_flights l_flights)
+{
+    Liste_flights tmp = NULL;
+    while (l_flights != NULL)
+    {
+        // On parcourt tous les vols pour trouver celui (s'il existe) entre les aéroports passés en argument
+        if (is_direct_flight_date (airport_org, airport_dest, d, l_flights->flight))
+        {
+            add_head_flight (&tmp, l_flights->flight);
+            break; // Si on l'a trouvé on casse la boucle
+        }
+        l_flights = l_flights->pnext_fli;
+    }
+
+    if (tmp == NULL) // On a trouvé aucun vol
+    {
+        printf ("Aucun vol direct n'existe entre %s et %s\n", airport_org, airport_dest);
+    }
+    else
+    { // On a trouvé un vol
+
+        printf ("------------------------------------------- VOL DIRECT ENTRE LES AEROPORTS %s et "
+                "%s LE %d/%d -------------------------------------------\n",
+                airport_org, airport_dest, d.month, d.day);
+
+        info_flight (tmp, 1);
+    }
+}

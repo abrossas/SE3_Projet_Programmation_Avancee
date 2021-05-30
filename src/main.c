@@ -124,6 +124,20 @@ int main ()
             printf ("\n");
         }
 
+        if (strcmp (requete, "find-itinerary") ==
+            0) // Requete find-itinerary <port_id> <port_id> <date> mais ne traite pas les arguments optionnels et renvoie un vol direct sans escale
+        {
+            requete = strtok (NULL, " ");
+            char port_org[IATA_AIRPORT_MAX];
+            strcpy (port_org, requete);
+            requete = strtok (NULL, " ");
+            char port_dest[IATA_AIRPORT_MAX];
+            strcpy (port_dest, requete);
+            requete = strtok (NULL, "\n");
+            Date d3 = convert_md_to_date (requete);
+            find_itinerary (port_org, port_dest, d3, l_flights);
+        }
+
         getline (&line, &n, stdin); // On traite une nouvelle ligne
     }
 
