@@ -6,6 +6,7 @@ most-delayed-airlines
 delayed-airlines HA
 changed-flights 12-24
 avg-flight-duration ORD STL
+find-itinerary IAH JAC 01-01
 most-delayed-airlines-at-airport LAX
 quit
 

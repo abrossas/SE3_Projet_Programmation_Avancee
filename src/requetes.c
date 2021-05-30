@@ -626,7 +626,7 @@ void find_itinerary (char airport_org[IATA_AIRPORT_MAX], char airport_dest[IATA_
 
     if (tmp == NULL) // On a trouvé aucun vol
     {
-        printf ("Aucun vol direct n'existe entre %s et %s\n", airport_org, airport_dest);
+        printf ("Aucun vol direct n'existe entre %s et %s le %d/%d\n", airport_org, airport_dest, d.month, d.day);
     }
     else
     { // On a trouvé un vol
