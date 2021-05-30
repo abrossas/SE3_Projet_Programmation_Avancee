@@ -48,7 +48,7 @@ int main ()
 				strcpy(port_id,requete); // requete <- "m/d"
 				requete = strtok(NULL, " ");
 				Date d = convert_md_to_date(requete); // On convertit "m/d" en une date
-				
+
 				int time = 0; // On initialise par défaut time à 0 (pour 00:00)
 				int max = 10; // Et max à 10	
 
@@ -70,7 +70,6 @@ int main ()
 			
 			if (strcmp(requete, "most-delayed-flights\n") == 0) // Requete most-delayed-flights
 				{
-				printf("ici\n");
 				most_delayed_flights(l_flights);
 				}
 
@@ -89,20 +88,23 @@ int main ()
 				most_delayed_airlines_at_airport(requete, l_airlines, l_flights);
 			}
 
-			if (strcmp(requete, "changed-flights") == 0) // Requete changed_flights <date>
+			if (strcmp(requete, "changed-flights") == 0) // Requete changed-flights <date>
 			{
 				requete = strtok(NULL, "\n"); // requete <- "m/d"
-				Date d = convert_md_to_date(requete);
-				changed_flights(d, l_flights);
+				Date d2 = convert_md_to_date(requete);
+				printf("%d %d", d2.month, d2.day);
+				changed_flights(d2, l_flights);
 			}
 
 			if (strcmp(requete, "avg-flight-duration") == 0) // Requete avg-flight-duration <port_id> <port_id>
 			{
 				requete = strtok(NULL, " "); // requete <- port_id1
-				char port_id[IATA_AIRPORT_MAX];
-				strcpy(port_id, requete);
-				requete = strtok(NULL, " "); // requete <- port_id2
-				avg_flight_duration(port_id, requete, l_flights);
+				char port_id1[IATA_AIRPORT_MAX];
+				strcpy(port_id1, requete);
+				requete = strtok(NULL, "\n"); // requete <- port_id2
+				char port_id2[IATA_AIRPORT_MAX];
+				strcpy(port_id2, requete);	
+				avg_flight_duration(port_id1, port_id2, l_flights);
 			}
 
 		getline(&line, &n, stdin); // On traite une nouvelle ligne

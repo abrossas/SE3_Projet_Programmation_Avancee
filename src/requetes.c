@@ -526,8 +526,8 @@ void avg_flight_duration(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIR
 		tmp = l_flights->flight;
 		if (is_flight_between_airports(airport1, airport2, tmp)) {
 			add_head_flight(&l_flights_airtime, tmp);
+			nb_flights++;
 		}
-		nb_flights++;
 		l_flights = l_flights->pnext_fli;
 	}
 
