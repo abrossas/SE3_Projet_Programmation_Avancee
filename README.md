@@ -11,7 +11,7 @@ Notre programme permet la recherche dans des bases de données de taille conséq
 
 2) **show-airlines** <port_id> : affiche les compagnies aériens qui ont des vols qui partent de l'aéroport <port_id>
 
-3) **show-flights** <port_id> <date> [<time>] [limit=<xx>] : affiche les vols qui partent de l'aéroport <port_id> à la date <date>, avec optionnellement une heure de début, et limité à xx vols (les arguments optionnels ne fonctionnent pas)
+3) **show-flights** <port_id> <date> [time] [limit=xx] : affiche les vols qui partent de l'aéroport <port_id> à la date <date>, avec optionnellement une heure de début, et limité à xx vols (les arguments optionnels ne fonctionnent pas)
 
 4) **most-delayed-flights** : donne les 5 vols qui ont subis les plus longs retards à l'arrivée
 
