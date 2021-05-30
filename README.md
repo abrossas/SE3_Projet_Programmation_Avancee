@@ -11,7 +11,7 @@ Notre programme permet la recherche dans des bases de données de taille conséq
 
 2) **show-airlines** <port_id> : affiche les compagnies aériens qui ont des vols qui partent de l'aéroport <port_id>
 
-3) **show-flights** <port_id> <date> [time] [limit=xx] : affiche les vols qui partent de l'aéroport <port_id> à la date <date>, avec optionnellement une heure de début, et limité à xx vols (les arguments optionnels ne fonctionnent pas)
+3) **show-flights** <port_id> *date* [time] [limit=xx] : affiche les vols qui partent de l'aéroport <port_id> à la date *date*, avec optionnellement une heure de début, et limité à xx vols (les arguments optionnels ne fonctionnent pas)
 
 4) **most-delayed-flights** : donne les 5 vols qui ont subis les plus longs retards à l'arrivée
 
@@ -21,11 +21,11 @@ Notre programme permet la recherche dans des bases de données de taille conséq
 
 7) **most-delayed-airlines-at-airport** <airport_id> : donne les 3 compagnies aériennes avec le plus de retard d'arrivée à l'aéroport <airport_id> passé en paramètre
 
-8) **changed-flights** <date> : les vols annulés ou déviés à la date <date> (format M-D)
+8) **changed-flights** *date* : les vols annulés ou déviés à la date *date* (format M-D)
 
 9) **avg-flight-duration** <port_id> <port_id> : calcule le temps de vol moyen entre les aéroports <port_id> passés en paramètre
 
-10) **find-itinerary** <port_org> <port_dest> <date> : trouve un itinéraire direct entre l'aéroport de départ <port_org> et d'arrivée <port_dest> à la date <date>
+10) **find-itinerary** <port_org> <port_dest> *date* : trouve un itinéraire direct entre l'aéroport de départ <port_org> et d'arrivée <port_dest> à la date *date*
 
  ## Contenu
 
