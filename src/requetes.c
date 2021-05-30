@@ -139,7 +139,7 @@ void show_airports (char airline[IATA_AIRPORT_MAX], Liste_airports l_airports, L
 
     // Cas où on a stocké tous les aéroports à afficher dans la liste l_airports_airline
 
-    printf ("\n-------------------- LISTE DES AEROPORTS DEPUIS LESQUELS LA COMPANIE %s OPERE DES "
+    printf ("-------------------- LISTE DES AEROPORTS DEPUIS LESQUELS LA COMPANIE %s OPERE DES "
             "VOLS --------------------\n", airline);
 
     info_airport(l_airports_airline);
@@ -259,8 +259,8 @@ void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_fligh
     char minutedep[MAX_MINUTE];
     convert_int_to_hour(hourdep, heuredep, minutedep);
 
-    printf ("--------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d APRES %s:%s (MAX %d PAR DEFAUT A 10)"
-            " ---------------\n",port_id,d.month,d.day,heuredep,minutedep,max);
+    printf ("----------------------------------------- LISTE DES VOLS PARTANT DE L'AEROPORT %s A LA DATE %d/%d APRES %s:%s (MAX %d PAR DEFAUT A 10)"
+            " -----------------------------------------\n",port_id,d.month,d.day,heuredep,minutedep,max);
     info_flight(l_tmp, max);
 }
 
@@ -307,7 +307,7 @@ void most_delayed_flights (Liste_flights l_flights) {
     
     // Il ne reste plus qu'à afficher tous les vols que le tableau contient
 
-    printf("---------------- LES %d VOLS QUI ONT SUBI LE PLUS DE RETARD A L'ARRIVEE ----------------\n", MAX_MOST);
+    printf("--------------------------------------------------------------- LES %d VOLS QUI ONT SUBI LE PLUS DE RETARD A L'ARRIVEE ---------------------------------------------------------------\n", MAX_MOST);
 
     for (int i=0; i<MAX_MOST; i++) {
         Flight tmp = tab_flights[i];
@@ -388,9 +388,8 @@ void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
 
     // On a maintenant notre tableau qui contient les compagnies ayant le plus de retard en moyenne à l'arrivée, il suffit alors de les afficher
 
-    printf("-------- LES %d COMPAGNIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE --------\n",MAX_MOST);
+    printf("------------------- LES %d COMPAGNIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE -------------------\n",MAX_MOST);
     for (int i=0; i<MAX_MOST; i++) {
-	    printf("%s", tab_airlines_delay[i].airline.airline);
         printf ("IATA CODE : %s ----------------- MEAN_DELAY : %.2f ----------------- AIRLINE : %s", tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].mean_delay, tab_airlines_delay[i].airline.airline);
     }
 }
