@@ -41,7 +41,7 @@ Pour que l'utilisateur puisse utiliser le code il faudra qu'il le compile de la 
 
 Bug à résoudre pour l'instant pour la requête **most-delayed-airlines-at-airport**, il faut l'utiliser en dernier et ne pas faire d'autres requêtes par la suite sinon il y a un SegFault (probablement dû à l'utilisation de la fonction **strtok**).
 
-De plus, les arguments optionnels ne fonctionnent pas pour la requête **show-flights <date> [<time>] [<limit=xx>]**, l'utilisateur peut les renseigner mais ils ne seront malheureusement pas pris en compte.
+De plus, les arguments optionnels ne fonctionnent pas pour la requête **show-flights <port_id> <date> [<time>] [limit=<xx>]**, l'utilisateur peut les renseigner mais ils ne seront malheureusement pas pris en compte.
 
 
 
