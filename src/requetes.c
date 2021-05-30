@@ -226,7 +226,7 @@ void info_flight(Liste_flights l_flights, int max) {
 	    char cancelled[MAX_DIVER];
 	    convert_int_to_yes(tmp.cancelled, cancelled);
 
-        printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %f -- AIRTIME : %f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
+        printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %.2f -- AIRTIME : %.2f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %.2f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
         l_flights = l_flights->pnext_fli;
 	i++;
     }
@@ -323,7 +323,7 @@ void most_delayed_flights (Liste_flights l_flights) {
 	    convert_int_to_yes(tmp.diverted, diverted);
 	    char cancelled[MAX_DIVER];
 	    convert_int_to_yes(tmp.cancelled, cancelled);
-        printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %f -- AIRTIME : %f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
+        printf("%s %d/%d -- AIRLINE : %s -- DEST : %s -- DEP HOUR %s:%s -- DEP DELAY : %.2f -- AIRTIME : %.2f -- DIST : %d -- ARR HOUR %s:%s -- ARR DELAY : %.2f -- DIVERTED : %s -- CANCELLED : %s\n", weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay, tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
     }
 }
 
@@ -390,7 +390,8 @@ void most_delayed_airlines(Liste_flights l_flights, Liste_airlines l_airlines) {
 
     printf("-------- LES %d COMPAGNIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE --------\n",MAX_MOST);
     for (int i=0; i<MAX_MOST; i++) {
-        printf ("IATA CODE : %s ----------------- AIRLINE : %s ----------------- MEAN_DELAY : %f\n", tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].airline.airline, tab_airlines_delay[i].mean_delay);
+	    printf("%s", tab_airlines_delay[i].airline.airline);
+        printf ("IATA CODE : %s ----------------- MEAN_DELAY : %.2f ----------------- AIRLINE : %s", tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].mean_delay, tab_airlines_delay[i].airline.airline);
     }
 }
 	
@@ -413,7 +414,7 @@ void delayed_airline(char iata_airline[IATA_AIRLINE_MAX], Liste_airlines l_airli
 	// Si on a trouvé
 
 	if (trouve) {
-		printf("------ RETARD MOYEN DE LA COMPAGNIE %s : %f ------\n",iata_airline,mean_delay_airline(airline, l_flights));
+		printf("------ RETARD MOYEN DE LA COMPAGNIE %s : %.2f ------\n",iata_airline,mean_delay_airline(airline, l_flights));
 	}
 
 	// Si on a pas trouvé
@@ -465,7 +466,7 @@ void most_delayed_airlines_at_airport(char iata_airport[IATA_AIRPORT_MAX], Liste
 
     printf("-------- LES %d COMPAGNIES AYANT LE PLUS DE RETARD EN MOYENNE A L'ARRIVEE DE L'AEROPORT %s --------\n",MAX_MOST2, iata_airport);
     for (int i=0; i<MAX_MOST2; i++) {
-        printf ("IATA CODE : %s ----------------- AIRLINE : %s ----------------- MEAN_DELAY : %f\n", tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].airline.airline, tab_airlines_delay[i].mean_delay);
+        printf ("IATA CODE : %s ----------------- MEAN_DELAY : %.2f ----------------- AIRLINE : %s", tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].mean_delay, tab_airlines_delay[i].airline.airline);
     }
 }
 
@@ -533,7 +534,7 @@ void avg_flight_duration(char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AIR
 
 	float mean = mean_airtime(l_flights_airtime); // On calcule la moyenne des temps de vol
 
-	printf("------- TEMPS DE VOL MOYEN ENTRE LES AEROPORTS %s ET %s : %f (%d VOLS) -------\n",airport1, airport2, mean, nb_flights);
+	printf("------- TEMPS DE VOL MOYEN ENTRE LES AEROPORTS %s ET %s : %.2f (%d VOLS) -------\n",airport1, airport2, mean, nb_flights);
 }
 
 // REQUETE 10 :
