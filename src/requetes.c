@@ -138,6 +138,7 @@ void show_airports (char airline[IATA_AIRPORT_MAX], Liste_airports l_airports, L
             airline);
 
     info_airport (l_airports_airline);
+    free_lairports (&l_airports_airline); // On libère la mémoire
 }
 
 //---------- DEUXIEME REQUETE ----------//
@@ -200,6 +201,7 @@ void show_airlines (char port_id[IATA_AIRPORT_MAX], Liste_airlines l_airlines, L
             "---------------\n",
             port_id);
     info_airline (l_airlines_airport);
+    free_lairlines (&l_airlines_airport); // On libère la mémoire
 }
 
 //---------- TROISIEME REQUETE ----------//
@@ -268,6 +270,7 @@ void show_flights (char port_id[IATA_AIRPORT_MAX], Date d, Liste_flights l_fligh
             " -----------------------------------------\n",
             port_id, d.month, d.day, heuredep, minutedep, max);
     info_flight (l_tmp, max);
+    free_lflights (&l_tmp); // On libère la mémoire
 }
 
 //---------- QUATRIEME REQUETE ----------//
@@ -349,7 +352,9 @@ void most_delayed_flights (Liste_flights l_flights)
                 weekday, tmp.month, tmp.day, tmp.airline, tmp.dest_air, hourdep, minutedep, tmp.dep_delay,
                 tmp.air_time, tmp.dist, hourarr, minutearr, tmp.arr_delay, diverted, cancelled);
     }
+    free (tab_flights); // On libère la mémoire
 }
+
 
 // REQUETE 5 : most-delayed-airlines //
 
@@ -425,6 +430,7 @@ void most_delayed_airlines (Liste_flights l_flights, Liste_airlines l_airlines)
                 tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].mean_delay,
                 tab_airlines_delay[i].airline.airline);
     }
+    free (tab_airlines_delay); // On libère la mémoire
 }
 
 // REQUETE 6 : delayed-airline // On utilisera la fonction mean_delay_airline codée précédemment
@@ -516,6 +522,7 @@ void most_delayed_airlines_at_airport (char iata_airport[IATA_AIRPORT_MAX], List
                 tab_airlines_delay[i].airline.iata_airlines, tab_airlines_delay[i].mean_delay,
                 tab_airlines_delay[i].airline.airline);
     }
+    free (tab_airlines_delay); // On libère la mémoire
 }
 
 // REQUETE 8 : changed-flights
@@ -548,6 +555,7 @@ void changed_flights (Date date, Liste_flights l_flights)
             "------------------------\n",
             date.month, date.day);
     info_flight (l_changed_flights, i);
+    free_lflights (&l_changed_flights); // On libère la mémoire
 }
 
 // REQUETE 9 :
@@ -599,6 +607,7 @@ void avg_flight_duration (char airport1[IATA_AIRPORT_MAX], char airport2[IATA_AI
 
     printf ("------- TEMPS DE VOL MOYEN ENTRE LES AEROPORTS %s ET %s : %.2f (%d VOLS) -------\n",
             airport1, airport2, mean, nb_flights);
+    free_lflights (&l_flights_airtime);
 }
 
 // REQUETE 10 : version simplifiée (trouve des vols directs sans escale)
@@ -626,7 +635,8 @@ void find_itinerary (char airport_org[IATA_AIRPORT_MAX], char airport_dest[IATA_
 
     if (tmp == NULL) // On a trouvé aucun vol
     {
-        printf ("Aucun vol direct n'existe entre %s et %s le %d/%d\n", airport_org, airport_dest, d.month, d.day);
+        printf ("Aucun vol direct n'existe entre %s et %s le %d/%d\n", airport_org, airport_dest,
+                d.month, d.day);
     }
     else
     { // On a trouvé un vol
@@ -636,5 +646,7 @@ void find_itinerary (char airport_org[IATA_AIRPORT_MAX], char airport_dest[IATA_
                 airport_org, airport_dest, d.month, d.day);
 
         info_flight (tmp, 1);
+	printf("\n");
+        free_lflights (&tmp);
     }
 }
